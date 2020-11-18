@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  api:
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "50102:8080"
+  socket:
+    build: ./socket
+    restart: on-failure
+    depends_on:
+      - api
+    ports:
+      - "50051:5001"
+  db:
+    image: mariadb:10.5.8
+    restart: unless-stopped
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_DATABASE: ffa_checkers
+      MYSQL_USER: ffa_checkers_user
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
