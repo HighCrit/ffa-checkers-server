@@ -10,11 +10,11 @@ services:
       - "50102:8080"
   socket:
     build: ./socket
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       - api
     ports:
-      - "50051:5001"
+      - "50051:6001"
   db:
     image: mariadb:10.5.8
     restart: unless-stopped
