@@ -25,6 +25,25 @@
       <artifactId>netty-socketio</artifactId>
       <version>1.7.18</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.12</version>
+    </dependency>
+
+    <!-- Logger -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.30</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.30</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -35,7 +54,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.highcrit.ffacheckers.socket.SocketServer</mainClass>
+              <mainClass>com.highcrit.ffacheckers.socket.SocketServerInitializer</mainClass>
             </manifest>
           </archive>
         </configuration>
