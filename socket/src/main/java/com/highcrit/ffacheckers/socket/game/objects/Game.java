@@ -1,7 +1,7 @@
 package com.highcrit.ffacheckers.socket.game.objects;
 
 import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
@@ -74,7 +74,7 @@ public class Game {
     return hasStarted;
   }
 
-  public HashMap<PlayerColor, AbstractClient> getPlayers() {
+  public Map<PlayerColor, AbstractClient> getPlayers() {
     return players;
   }
 }
