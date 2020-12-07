@@ -1,6 +1,7 @@
 package com.highcrit.ffacheckers.socket.game.objects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -58,7 +59,7 @@ public class Board {
           // if it does exist add piece to existing array
           this.pieces.merge(
               piece.getPlayerColor(),
-              Collections.singletonList(piece),
+              new ArrayList<>(Collections.singletonList(piece)),
               (o, n) -> {
                 o.add(piece);
                 return o;
