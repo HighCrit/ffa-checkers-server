@@ -15,36 +15,36 @@ public class LobbyManager {
   private final SocketManager socketManager;
   private final HashMap<String, Lobby> lobbies = new HashMap<>();
 
-    public LobbyManager(SocketManager socketManager) {
-        this.socketManager = socketManager;
+  public LobbyManager(SocketManager socketManager) {
+    this.socketManager = socketManager;
+  }
+
+  public String create() {
+    int retryLength = 4;
+    String code = StringUtil.generateCode(retryLength);
+
+    // Tries to find a unique lobby code
+    while (this.lobbies.containsKey(code)) {
+      code = StringUtil.generateCode(retryLength);
+      // if no unique code was generated after two attempts increase code length by one
+      retryLength++;
     }
 
-    public String create() {
-        int retryLength = 4;
-        String code = StringUtil.generateCode(retryLength);
+    final Lobby lobby = new Lobby(this, code);
+    this.lobbies.put(code, lobby);
 
-        // Tries to find a unique lobby code
-        while (this.lobbies.containsKey(code)) {
-            code = StringUtil.generateCode(retryLength);
-            // if no unique code was generated after two attempts increase code length by one
-            retryLength++;
-        }
+    return code;
+  }
 
-        final Lobby lobby = new Lobby(this, code);
-        this.lobbies.put(code, lobby);
-
-        return code;
+  public void delete(String code, String reason) {
+    Lobby lobby = lobbies.get(code);
+    if (lobby == null) {
+      return;
     }
-
-    public void delete(String code, String reason) {
-        Lobby lobby = lobbies.get(code);
-        if (lobby == null) {
-            return;
-        }
-        LOGGER.info(String.format("Closing lobby {%s) with reason: %s", code, reason));
-        lobby.send("lobby-closing", new LobbyClosing(reason));
-        lobby.delete();
-        socketManager.clearRoom(code);
-        lobbies.remove(code);
-    }
+    LOGGER.info(String.format("Closing lobby {%s) with reason: %s", code, reason));
+    lobby.send("lobby-closing", new LobbyClosing(reason));
+    lobby.delete();
+    socketManager.clearRoom(code);
+    lobbies.remove(code);
+  }
 }

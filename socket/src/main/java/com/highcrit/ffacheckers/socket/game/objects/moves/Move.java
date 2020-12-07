@@ -1,15 +1,25 @@
 package com.highcrit.ffacheckers.socket.game.objects.moves;
 
-public abstract class Move {
-  protected static final String FEN_CAPTURE_SYMBOL = "x";
-  protected static final String FEN_MOVE_SYMBOL = "-";
+import java.util.Objects;
 
-  protected final int start;
-  protected int end;
+import com.highcrit.ffacheckers.socket.game.objects.Piece;
 
-  public Move(int start) {
+public class Move {
+  private static final String FEN_CAPTURE_SYMBOL = "x";
+  private static final String FEN_MOVE_SYMBOL = "-";
+
+  private final int start;
+  private final int end;
+  private final Piece takes;
+
+  public Move(int start, int end, Piece takes) {
     this.start = start;
-    this.end = start;
+    this.end = end;
+    this.takes = takes;
+  }
+
+  public Move(int start, int end) {
+    this(start, end, null);
   }
 
   public int getStart() {
@@ -20,12 +30,32 @@ public abstract class Move {
     return end;
   }
 
-  @Override
-  public abstract String toString();
+  public Piece getTakes() {
+    return takes;
+  }
 
   @Override
-  public abstract boolean equals(Object o);
+  public String toString() {
+    if (takes == null) {
+      return start + FEN_MOVE_SYMBOL + end;
+    }
+    return start + FEN_CAPTURE_SYMBOL + end;
+  }
 
   @Override
-  public abstract int hashCode();
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Move move = (Move) o;
+    return start == move.start && end == move.end && Objects.equals(takes, move.takes);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(start, end);
+  }
 }

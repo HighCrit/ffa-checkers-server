@@ -16,16 +16,16 @@ public class OnResetUUID implements DataListener<UID> {
 
   @Override
   public void onData(SocketIOClient socketIOClient, UID uid, AckRequest ackRequest) {
-      AbstractClient info = socketManager.getById(uid.getId());
-      if (info == null) {
-          return;
-      }
-      if (info.getLobby() != null) {
-          // TODO: Remove player from lobby
-      }
+    AbstractClient info = socketManager.getById(uid.getId());
+    if (info == null) {
+      return;
+    }
+    if (info.getLobby() != null) {
+      // TODO: Remove player from lobby
+    }
 
-      this.socketManager.remove(info.getId());
-      UID id = this.socketManager.registerClient(socketIOClient, null);
-      info.send("uuid", id);
+    this.socketManager.remove(info.getId());
+    UID id = this.socketManager.registerClient(socketIOClient, null);
+    info.send("uuid", id);
   }
 }

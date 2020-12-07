@@ -3,17 +3,17 @@ package com.highcrit.ffacheckers.socket.server.objects.data;
 import java.util.UUID;
 
 public class UID {
-    private UUID id;
+  private UUID id;
 
-    public UID(UUID id) {
-        this.id = id;
-    }
+  public UID(UUID id) {
+    this.id = id;
+  }
 
-    public UUID getId() {
-        return id;
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 }

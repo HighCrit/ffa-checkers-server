@@ -8,9 +8,7 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
-import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnConnection;
@@ -20,19 +18,16 @@ import org.slf4j.LoggerFactory;
 
 public class SocketManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(SocketManager.class);
-  private static final Configuration CONFIG =
-      new Configuration() {
-        {
-          setContext("/sockets");
-          setPort(6001);
-        }
-      };
 
   private final HashMap<UUID, PlayerClient> sockets = new HashMap<>();
   private final SocketIOServer server;
 
   public SocketManager() {
-    server = new SocketIOServer(CONFIG);
+    Configuration config = new Configuration();
+    config.setContext("/sockets");
+    config.setPort(6001);
+
+    server = new SocketIOServer(config);
   }
 
   public void initialize() {
@@ -110,5 +105,4 @@ public class SocketManager {
 
     return new UID(knownId);
   }
-
 }

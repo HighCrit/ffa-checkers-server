@@ -26,7 +26,7 @@ class BoardTest {
     Board constructed = Board.fromFen(board.toFen());
     Assertions.assertNotNull(constructed);
     pieces.forEach(
-        piece -> Assertions.assertEquals(constructed.getBoard()[piece.getPosition()], piece));
+        piece -> Assertions.assertEquals(constructed.getGrid()[piece.getPosition()], piece));
   }
 
   @Test
@@ -34,6 +34,6 @@ class BoardTest {
     String FEN = "Y2,K155,158:B6:RK94";
     Board board = Board.fromFen(FEN);
     Assertions.assertNotNull(board);
-    pieces.forEach(piece -> Assertions.assertEquals(board.getBoard()[piece.getPosition()], piece));
+    pieces.forEach(piece -> Assertions.assertEquals(board.getGrid()[piece.getPosition()], piece));
   }
 }

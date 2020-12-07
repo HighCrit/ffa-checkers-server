@@ -1,21 +1,26 @@
 package com.highcrit.ffacheckers.socket.game.enums;
 
+import java.util.EnumMap;
+
 public enum Direction {
-  UP_RIGHT("DOWN_LEFT", -9),
-  DOWN_RIGHT("UP_LEFT", 9),
-  DOWN_LEFT("UP_RIGHT", 8),
-  UP_LEFT("DOWN_RIGHT", -10);
+  UP_RIGHT(-9),
+  DOWN_RIGHT(9),
+  DOWN_LEFT(8),
+  UP_LEFT(-10);
 
-  private final String oppositeDirection;
-  private final int indexOffset;
+  public static final EnumMap<Direction, Direction> OPPOSITE = new EnumMap<>(Direction.class);
 
-  Direction(String oppositeDirection, int indexOffset) {
-    this.oppositeDirection = oppositeDirection;
-    this.indexOffset = indexOffset;
+  static {
+    OPPOSITE.put(UP_RIGHT, DOWN_LEFT);
+    OPPOSITE.put(DOWN_RIGHT, UP_LEFT);
+    OPPOSITE.put(DOWN_LEFT, UP_RIGHT);
+    OPPOSITE.put(UP_LEFT, DOWN_RIGHT);
   }
 
-  public Direction getOppositeDirection() {
-    return Direction.valueOf(oppositeDirection);
+  private final int indexOffset;
+
+  Direction(int indexOffset) {
+    this.indexOffset = indexOffset;
   }
 
   public int getIndexInDirectionFrom(int index) {

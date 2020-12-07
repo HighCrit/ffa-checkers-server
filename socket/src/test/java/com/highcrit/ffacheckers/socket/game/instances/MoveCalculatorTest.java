@@ -2,15 +2,14 @@ package com.highcrit.ffacheckers.socket.game.instances;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
-import com.highcrit.ffacheckers.socket.game.enums.Direction;
 import com.highcrit.ffacheckers.socket.game.objects.Board;
 import com.highcrit.ffacheckers.socket.game.objects.Piece;
-import com.highcrit.ffacheckers.socket.game.objects.moves.CapturingMove;
 import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
-import com.highcrit.ffacheckers.socket.game.objects.moves.NormalMove;
+import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -29,16 +28,24 @@ class MoveCalculatorTest {
             add(new Piece(PlayerColor.BLUE, 57));
           }
         };
-    List<Move> expectedMoves =
+    List<MoveSequence> expectedMoves =
         new ArrayList<>() {
           {
-            add(new CapturingMove(30, Arrays.asList(Direction.DOWN_LEFT, Direction.DOWN_RIGHT)));
-            add(new CapturingMove(30, Arrays.asList(Direction.DOWN_LEFT, Direction.DOWN_LEFT)));
+            add(
+                new MoveSequence(
+                    new LinkedList<>(
+                        Arrays.asList(
+                            new Move(30, 47, pieces.get(1)), new Move(47, 66, pieces.get(3))))));
+            add(
+                new MoveSequence(
+                    new LinkedList<>(
+                        Arrays.asList(
+                            new Move(30, 47, pieces.get(1)), new Move(47, 64, pieces.get(2))))));
           }
         };
     Board board = new Board(pieces);
-    List<? extends Move> capturingMoves = moveCalculator.getMoves(board, PlayerColor.YELLOW);
-    Assertions.assertIterableEquals(expectedMoves, capturingMoves);
+    Assertions.assertIterableEquals(
+        expectedMoves, moveCalculator.getCapturingMoves(board, PlayerColor.YELLOW));
   }
 
   @Test
@@ -54,16 +61,16 @@ class MoveCalculatorTest {
     List<Move> expectedMoves =
         new ArrayList<>() {
           {
-            add(new NormalMove(121, Direction.UP_RIGHT));
-            add(new NormalMove(121, Direction.UP_LEFT));
-            add(new NormalMove(31, Direction.UP_RIGHT));
-            add(new NormalMove(31, Direction.DOWN_RIGHT));
-            add(new NormalMove(31, Direction.DOWN_LEFT));
-            add(new NormalMove(31, Direction.UP_LEFT));
+            add(new Move(121, 113));
+            add(new Move(121, 112));
+            add(new Move(31, 23));
+            add(new Move(31, 41));
+            add(new Move(31, 40));
+            add(new Move(31, 22));
           }
         };
     Board board = new Board(pieces);
-    List<? extends Move> normalMoves = moveCalculator.getMoves(board, PlayerColor.YELLOW);
-    Assertions.assertIterableEquals(expectedMoves, normalMoves, normalMoves::toString);
+    Assertions.assertIterableEquals(
+        expectedMoves, moveCalculator.getNormalMoves(board, PlayerColor.YELLOW));
   }
 }

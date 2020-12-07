@@ -1,13 +1,13 @@
 package com.highcrit.ffacheckers.socket.lobby.objects.data;
 
 public class LobbyClosing {
-    private final String reason;
+  private final String reason;
 
-    public LobbyClosing(String reason) {
-        this.reason = reason;
-    }
+  public LobbyClosing(String reason) {
+    this.reason = reason;
+  }
 
-    public String getReason() {
-        return reason;
-    }
+  public String getReason() {
+    return reason;
+  }
 }

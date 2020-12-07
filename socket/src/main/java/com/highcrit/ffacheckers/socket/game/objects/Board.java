@@ -1,15 +1,18 @@
 package com.highcrit.ffacheckers.socket.game.objects;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
+import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
 
 public class Board {
   public static final int BLACK_SQUARES = 162;
@@ -18,8 +21,9 @@ public class Board {
   private static final String FEN_DELIMITER = ":";
   private static final String FEN_PIECE_DELIMITER = ",";
 
-  private final Piece[] board = new Piece[BLACK_SQUARES];
-  private final HashMap<PlayerColor, List<Piece>> pieces = new HashMap<>();
+  private final Piece[] grid = new Piece[BLACK_SQUARES];
+  private final EnumMap<PlayerColor, List<Piece>> pieces = new EnumMap<>(PlayerColor.class);
+  private final LinkedList<Move> moveHistory = new LinkedList<>();
 
   public Board(List<Piece> pieces) {
     placePieces(pieces);
@@ -49,16 +53,12 @@ public class Board {
   private void placePieces(List<Piece> pieces) {
     pieces.forEach(
         piece -> {
-          board[piece.getPosition()] = piece;
+          grid[piece.getPosition()] = piece;
           // if key doesn't exist create new with array containing piece
           // if it does exist add piece to existing array
           this.pieces.merge(
               piece.getPlayerColor(),
-              new ArrayList<>() {
-                {
-                  add(piece);
-                }
-              },
+              Collections.singletonList(piece),
               (o, n) -> {
                 o.add(piece);
                 return o;
@@ -67,34 +67,48 @@ public class Board {
   }
 
   public void applyMove(Move move) {
-    // TODO: applyMove
+    Piece piece = grid[move.getStart()];
+    piece.setPosition(move.getEnd());
+    grid[move.getStart()] = null;
+    grid[move.getEnd()] = piece;
+    if (move.getTakes() != null) {
+      grid[move.getTakes().getPosition()] = null;
+    }
+
+    moveHistory.add(move);
   }
 
-  public void undoMove(Move move) {
-    // TODO: undoMove
+  public void undoMove() {
+    Move move = moveHistory.removeLast();
+
+    Piece piece = grid[move.getEnd()];
+    piece.setPosition(move.getStart());
+    grid[move.getEnd()] = null;
+    grid[move.getStart()] = piece;
+    if (move.getTakes() != null) {
+      grid[move.getTakes().getPosition()] = move.getTakes();
+    }
   }
 
   public String toFen() {
     StringBuilder sb = new StringBuilder();
 
     this.pieces.forEach(
-        (playerColor, pieces) -> {
+        (playerColor, p) -> {
           sb.append(playerColor.getColorChar());
           sb.append(
-              pieces.stream()
-                  .map(Objects::toString)
-                  .collect(Collectors.joining(FEN_PIECE_DELIMITER)));
+              p.stream().map(Objects::toString).collect(Collectors.joining(FEN_PIECE_DELIMITER)));
           sb.append(FEN_DELIMITER);
         });
 
     return sb.substring(0, sb.length() - 1);
   }
 
-  public Piece[] getBoard() {
-    return board;
+  public Piece[] getGrid() {
+    return grid;
   }
 
-  public HashMap<PlayerColor, List<Piece>> getPieces() {
+  public Map<PlayerColor, List<Piece>> getPieces() {
     return pieces;
   }
 }

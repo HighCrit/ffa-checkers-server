@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.highcrit.ffacheckers.socket.game.objects.Game;
-import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
-import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
 import com.highcrit.ffacheckers.socket.utils.data.ActionFailed;
@@ -23,12 +21,10 @@ public class Lobby {
 
   private final HashMap<UUID, AbstractClient> connectedClients = new HashMap<>();
 
-  private final LobbyManager lobbyManager;
   private final Game game = new Game(this);
   private final String code;
 
   public Lobby(LobbyManager lobbyManager, String code) {
-    this.lobbyManager = lobbyManager;
     this.code = code;
 
     scheduler.scheduleTask(
@@ -49,53 +45,52 @@ public class Lobby {
   }
 
   public void onPlayerReconnect(PlayerClient info) {
-      game.onPlayerLoaded(info);
-      info.send("lobby-reconnect", new LobbyJoinResult(code));
+    game.onPlayerLoaded(info);
+    info.send("lobby-reconnect", new LobbyJoinResult(code));
 
-      if (shouldResume()) {
-          unpause();
-      }
+    if (shouldResume()) {
+      unpause();
+    }
 
-      info.setLobby(this);
+    info.setLobby(this);
   }
 
   public Result addPlayer(UUID id, AbstractClient client) {
-      if (connectedClients.size() >= Game.MAX_PLAYERS) {
-          return new ActionFailed("Lobby is full");
-      }
+    if (connectedClients.size() >= Game.MAX_PLAYERS) {
+      return new ActionFailed("Lobby is full");
+    }
     connectedClients.put(id, client);
     return new LobbyJoinResult(code);
   }
 
   public void removePlayer(PlayerClient info) {
-      connectedClients.remove(info.getId());
-      game.removePlayer(info);
-      send("player-left", null);
+    connectedClients.remove(info.getId());
+    game.removePlayer(info);
+    send("player-left", null);
   }
 
   public void delete() {
-      connectedClients.values().forEach(s -> s.setLobby(null));
+    connectedClients.values().forEach(s -> s.setLobby(null));
   }
 
   public void send(String eventName, Object data) {
-      connectedClients.values().forEach(s -> s.send(eventName, data));
+    connectedClients.values().forEach(s -> s.send(eventName, data));
   }
 
-
   public void pause() {
-      send("game-pause", null);
+    send("game-pause", null);
   }
 
   public void unpause() {
-      send("game-unpaused", null);
+    send("game-unpaused", null);
   }
 
   // TODO:
   public boolean shouldResume() {
-      return true;
+    return true;
   }
 
-    public String getCode() {
-        return code;
-    }
+  public String getCode() {
+    return code;
+  }
 }
