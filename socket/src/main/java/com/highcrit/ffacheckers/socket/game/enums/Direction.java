@@ -8,15 +8,6 @@ public enum Direction {
   DOWN_LEFT(8),
   UP_LEFT(-10);
 
-  public static final EnumMap<Direction, Direction> OPPOSITE = new EnumMap<>(Direction.class);
-
-  static {
-    OPPOSITE.put(UP_RIGHT, DOWN_LEFT);
-    OPPOSITE.put(DOWN_RIGHT, UP_LEFT);
-    OPPOSITE.put(DOWN_LEFT, UP_RIGHT);
-    OPPOSITE.put(UP_LEFT, DOWN_RIGHT);
-  }
-
   private final int indexOffset;
 
   Direction(int indexOffset) {

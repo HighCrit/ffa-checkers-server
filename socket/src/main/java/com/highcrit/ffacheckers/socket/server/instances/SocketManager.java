@@ -12,6 +12,7 @@ import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnConnection;
+import com.highcrit.ffacheckers.socket.server.objects.listeners.OnResetUUID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnUUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public class SocketManager {
   private void registerEventListeners() {
     server.addConnectListener(new OnConnection());
     addEventListener("uuid", UID.class, new OnUUID(this));
+    addEventListener("reset-uuid", UID.class, new OnResetUUID(this));;
   }
 
   public <T> void addEventListener(String eventName, Class<T> dto, DataListener<T> listener) {
