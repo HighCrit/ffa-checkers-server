@@ -22,11 +22,9 @@ public class Lobby {
   private final HashMap<UUID, AbstractClient> connectedClients = new HashMap<>();
 
   private final Game game = new Game(this);
-  private final String code;
+  private final UUID code = UUID.randomUUID();
 
-  public Lobby(LobbyManager lobbyManager, String code) {
-    this.code = code;
-
+  public Lobby(LobbyManager lobbyManager) {
     scheduler.scheduleTask(
         () -> {
           if (!this.game.hasStarted()) {
@@ -90,7 +88,11 @@ public class Lobby {
     return true;
   }
 
-  public String getCode() {
+  public UUID getCode() {
     return code;
+  }
+
+  public Game getGame() {
+    return game;
   }
 }

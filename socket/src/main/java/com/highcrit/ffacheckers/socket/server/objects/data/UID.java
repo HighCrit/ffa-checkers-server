@@ -5,6 +5,8 @@ import java.util.UUID;
 public class UID {
   private UUID id;
 
+  public UID() {}
+
   public UID(UUID id) {
     this.id = id;
   }

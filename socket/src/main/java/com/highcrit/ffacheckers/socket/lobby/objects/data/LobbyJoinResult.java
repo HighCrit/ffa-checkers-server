@@ -1,15 +1,17 @@
 package com.highcrit.ffacheckers.socket.lobby.objects.data;
 
+import java.util.UUID;
+
 import com.highcrit.ffacheckers.socket.utils.data.Result;
 
 public class LobbyJoinResult implements Result {
-  private final String code;
+  private final UUID code;
 
-  public LobbyJoinResult(String code) {
+  public LobbyJoinResult(UUID code) {
     this.code = code;
   }
 
-  public String getCode() {
+  public UUID getCode() {
     return code;
   }
 

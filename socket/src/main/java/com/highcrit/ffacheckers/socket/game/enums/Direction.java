@@ -1,7 +1,5 @@
 package com.highcrit.ffacheckers.socket.game.enums;
 
-import java.util.EnumMap;
-
 public enum Direction {
   UP_RIGHT(-9),
   DOWN_RIGHT(9),

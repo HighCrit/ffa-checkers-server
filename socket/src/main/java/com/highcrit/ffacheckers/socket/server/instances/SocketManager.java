@@ -8,10 +8,17 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
+import com.highcrit.ffacheckers.socket.game.objects.listeners.OnGameLoaded;
+import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
+import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyCreate;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyJoin;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLeave;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnConnection;
+import com.highcrit.ffacheckers.socket.server.objects.listeners.OnDisconnection;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnResetUUID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnUUID;
 import org.slf4j.Logger;
@@ -21,6 +28,7 @@ public class SocketManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(SocketManager.class);
 
   private final HashMap<UUID, PlayerClient> sockets = new HashMap<>();
+  private final LobbyManager lobbyManager;
   private final SocketIOServer server;
 
   public SocketManager() {
@@ -28,6 +36,7 @@ public class SocketManager {
     config.setContext("/sockets");
     config.setPort(6001);
 
+    lobbyManager = new LobbyManager(this);
     server = new SocketIOServer(config);
   }
 
@@ -40,8 +49,14 @@ public class SocketManager {
 
   private void registerEventListeners() {
     server.addConnectListener(new OnConnection());
+    server.addDisconnectListener(new OnDisconnection(this));
     addEventListener("uuid", UID.class, new OnUUID(this));
-    addEventListener("reset-uuid", UID.class, new OnResetUUID(this));;
+    addEventListener("reset-uuid", UID.class, new OnResetUUID(this));
+    addEventListener("lobby-create-action", null, new OnLobbyCreate(lobbyManager, this));
+    addEventListener(
+        "lobby-join-action", LobbyJoinAction.class, new OnLobbyJoin(lobbyManager, this));
+    addEventListener("lobby-leave-action", null, new OnLobbyLeave(this));
+    addEventListener("game-loaded", null, new OnGameLoaded(this));
   }
 
   public <T> void addEventListener(String eventName, Class<T> dto, DataListener<T> listener) {
@@ -58,17 +73,17 @@ public class SocketManager {
     sockets.remove(id);
   }
 
-  public void joinRoom(UUID id, String room) {
+  public void joinRoom(UUID id, UUID room) {
     if (!has(id)) {
       return;
     }
     LOGGER.info(String.format("Moving socket with id: %s to lobby: %s", id, room));
-    sockets.get(id).getSocket().joinRoom(room);
+    sockets.get(id).getSocket().joinRoom(room.toString());
   }
 
-  public void clearRoom(String code) {
+  public void clearRoom(UUID code) {
     LOGGER.info(String.format("Removing sockets from lobby: %s", code));
-    BroadcastOperations room = server.getRoomOperations(code);
+    BroadcastOperations room = server.getRoomOperations(code.toString());
     if (room != null) room.disconnect();
   }
 

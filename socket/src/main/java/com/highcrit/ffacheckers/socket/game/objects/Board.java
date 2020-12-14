@@ -1,7 +1,6 @@
 package com.highcrit.ffacheckers.socket.game.objects;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -45,9 +44,6 @@ public class Board {
         }
       }
     }
-
-    if (pieces.isEmpty()) return null;
-
     return new Board(pieces);
   }
 

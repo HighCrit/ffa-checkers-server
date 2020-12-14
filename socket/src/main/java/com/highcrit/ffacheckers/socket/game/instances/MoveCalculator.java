@@ -60,7 +60,6 @@ public class MoveCalculator {
           // Check if place after piece is available to jump to
           int positionAfterJump = direction.getIndexInDirectionFrom(positionInDirection);
 
-          // TODO: Check if piece to capture isn't a ghost
           if (positionAfterJump != -1
               && board.getGrid()[positionAfterJump] == null) { // if can jump to valid spot
             // Move from start to position after jump is a valid move

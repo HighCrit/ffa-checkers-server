@@ -32,17 +32,25 @@ public class Game {
   public void start(String fen) {
     if (hasStarted) throw new IllegalStateException();
     hasStarted = true;
-    board = Board.fromFen(fen == null ? DEFAULT_FEN : fen);
+    board = Board.fromFen(fen);
+    setGameState(GameState.PLAYING);
+    lobby.send("game-board", board.toString());
   }
 
   public void onPlayerLoaded(AbstractClient info) {
     if (hasStarted()) {
-      // TODO: Send game info
+      info.send("game-state", gameState);
+      info.send("game-board", board.toString());
+      info.send("game-current-player", currentPlayer);
     } else {
       players.values().stream()
           .filter(info::equals)
           .findFirst()
           .ifPresent(abstractPlayerClient -> abstractPlayerClient.setLoaded(true));
+
+      if (players.values().stream().allMatch(AbstractClient::isLoaded) && players.size() == 4) {
+        start(DEFAULT_FEN);
+      }
     }
   }
 
