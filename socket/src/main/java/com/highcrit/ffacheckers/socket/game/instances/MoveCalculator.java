@@ -75,7 +75,7 @@ public class MoveCalculator {
         }
       }
     }
-    if (!jumpFound) {
+    if (!jumpFound && !pastMoves.isEmpty()) {
       moveSequences.add(new MoveSequence(pastMoves));
     }
   }

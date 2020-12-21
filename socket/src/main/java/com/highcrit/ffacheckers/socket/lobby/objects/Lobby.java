@@ -1,11 +1,15 @@
 package com.highcrit.ffacheckers.socket.lobby.objects;
 
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.objects.Game;
 import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
+import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyPlayers;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
@@ -49,8 +53,8 @@ public class Lobby {
     if (shouldResume()) {
       unpause();
     }
-
     info.setLobby(this);
+    sendPlayers();
   }
 
   public Result addPlayer(UUID id, AbstractClient client) {
@@ -58,13 +62,19 @@ public class Lobby {
       return new ActionFailed("Lobby is full");
     }
     connectedClients.put(id, client);
+    game.addPlayer(client);
+    client.setLobby(this);
+
+    sendPlayers();
+
     return new LobbyJoinResult(code);
   }
 
   public void removePlayer(PlayerClient info) {
     connectedClients.remove(info.getId());
     game.removePlayer(info);
-    send("player-left", null);
+    info.setHost(false);
+    sendPlayers();
   }
 
   public void delete() {
@@ -94,5 +104,11 @@ public class Lobby {
 
   public Game getGame() {
     return game;
+  }
+
+  private void sendPlayers() {
+    Map<PlayerColor, String> players = new EnumMap<>(PlayerColor.class);
+    game.getPlayers().forEach((color, player) -> players.put(color, player.getName()));
+    send("lobby-player-joined", new LobbyPlayers(players));
   }
 }

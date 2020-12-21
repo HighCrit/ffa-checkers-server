@@ -63,13 +63,22 @@ public class Board {
         });
   }
 
+  public void removePlayer(PlayerColor color) {
+    pieces.get(color).forEach(p -> {
+      grid[p.getPosition()] = null;
+    });
+    pieces.remove(color);
+  }
+
   public void applyMove(Move move) {
     Piece piece = grid[move.getStart()];
     piece.setPosition(move.getEnd());
+
     grid[move.getStart()] = null;
     grid[move.getEnd()] = piece;
     if (move.getTakes() != null) {
       grid[move.getTakes().getPosition()] = null;
+      pieces.get(move.getTakes().getPlayerColor()).remove(move.getTakes());
     }
 
     moveHistory.add(move);
@@ -84,6 +93,7 @@ public class Board {
     grid[move.getStart()] = piece;
     if (move.getTakes() != null) {
       grid[move.getTakes().getPosition()] = move.getTakes();
+      pieces.get(move.getTakes().getPlayerColor()).add(move.getTakes());
     }
   }
 

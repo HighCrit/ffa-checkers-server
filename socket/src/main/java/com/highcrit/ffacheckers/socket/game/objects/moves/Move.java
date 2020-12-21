@@ -8,9 +8,11 @@ public class Move {
   private static final String FEN_CAPTURE_SYMBOL = "x";
   private static final String FEN_MOVE_SYMBOL = "-";
 
-  private final int start;
-  private final int end;
-  private final Piece takes;
+  private int start;
+  private int end;
+  private Piece takes;
+
+  public Move() {}
 
   public Move(int start, int end, Piece takes) {
     this.start = start;

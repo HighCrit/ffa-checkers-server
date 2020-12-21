@@ -5,10 +5,13 @@ import java.util.Objects;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 
 public class Piece {
-  private final PlayerColor playerColor;
+  private PlayerColor playerColor;
   private int position;
   private boolean isKing;
   private boolean isGhost = false;
+
+  public Piece() {
+  }
 
   public Piece(PlayerColor playerColor, int position, boolean isKing) {
     this.playerColor = playerColor;

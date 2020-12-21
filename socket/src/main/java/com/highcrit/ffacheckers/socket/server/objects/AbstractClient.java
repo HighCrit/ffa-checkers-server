@@ -11,30 +11,16 @@ public abstract class AbstractClient {
   private Lobby lobby;
 
   protected final UUID id;
-  private PlayerColor playerColor;
+  protected String name;
+  protected PlayerColor playerColor;
   private boolean loaded;
+  private boolean left;
 
   public AbstractClient(UUID id) {
     this.id = id;
   }
 
   public abstract void send(String eventName, Object data);
-
-  public PlayerColor getPlayerColor() {
-    return playerColor;
-  }
-
-  public void setPlayerColor(PlayerColor playerColor) {
-    this.playerColor = playerColor;
-  }
-
-  public boolean isLoaded() {
-    return loaded;
-  }
-
-  public void setLoaded(boolean loaded) {
-    this.loaded = loaded;
-  }
 
   public ConnectionState getState() {
     return state;
@@ -54,5 +40,37 @@ public abstract class AbstractClient {
 
   public UUID getId() {
     return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public PlayerColor getPlayerColor() {
+    return playerColor;
+  }
+
+  public void setPlayerColor(PlayerColor playerColor) {
+    this.playerColor = playerColor;
+  }
+
+  public boolean isLoaded() {
+    return loaded;
+  }
+
+  public void setLoaded(boolean loaded) {
+    this.loaded = loaded;
+  }
+
+  public boolean hasLeft() {
+    return left;
+  }
+
+  public void setLeft(boolean left) {
+    this.left = left;
   }
 }

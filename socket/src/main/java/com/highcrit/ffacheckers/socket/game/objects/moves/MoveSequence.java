@@ -1,6 +1,7 @@
 package com.highcrit.ffacheckers.socket.game.objects.moves;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,10 @@ public class MoveSequence {
 
   public MoveSequence() {
     this.sequence = new LinkedList<>();
+  }
+
+  public List<Move> getSequence() {
+    return sequence;
   }
 
   public boolean addMove(Move move) {

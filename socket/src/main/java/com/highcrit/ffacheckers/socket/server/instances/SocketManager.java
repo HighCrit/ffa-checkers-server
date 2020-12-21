@@ -9,8 +9,11 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.socket.game.objects.listeners.OnGameLoaded;
+import com.highcrit.ffacheckers.socket.game.objects.listeners.OnMove;
+import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
 import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyAddAI;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyCreate;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyJoin;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLeave;
@@ -56,7 +59,9 @@ public class SocketManager {
     addEventListener(
         "lobby-join-action", LobbyJoinAction.class, new OnLobbyJoin(lobbyManager, this));
     addEventListener("lobby-leave-action", null, new OnLobbyLeave(this));
+    addEventListener("lobby-add-ai-action", null, new OnLobbyAddAI(this));
     addEventListener("game-loaded", null, new OnGameLoaded(this));
+    addEventListener("game-move-action", Move.class, new OnMove(this));
   }
 
   public <T> void addEventListener(String eventName, Class<T> dto, DataListener<T> listener) {
