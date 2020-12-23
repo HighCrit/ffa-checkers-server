@@ -43,16 +43,14 @@ public class Lobby {
       LOGGER.error("Tried to handle player disconnect that wasn't in this lobby");
       return;
     }
-    pause();
+    // TODO: Send info on disconnected player
+    send("lobby-player-disconnected", null);
   }
 
   public void onPlayerReconnect(PlayerClient info) {
     game.onPlayerLoaded(info);
     info.send("lobby-reconnect", new LobbyJoinResult(code));
 
-    if (shouldResume()) {
-      unpause();
-    }
     info.setLobby(this);
     sendPlayers();
   }
@@ -83,19 +81,6 @@ public class Lobby {
 
   public void send(String eventName, Object data) {
     connectedClients.values().forEach(s -> s.send(eventName, data));
-  }
-
-  public void pause() {
-    send("game-pause", null);
-  }
-
-  public void unpause() {
-    send("game-unpaused", null);
-  }
-
-  // TODO:
-  public boolean shouldResume() {
-    return true;
   }
 
   public UUID getCode() {

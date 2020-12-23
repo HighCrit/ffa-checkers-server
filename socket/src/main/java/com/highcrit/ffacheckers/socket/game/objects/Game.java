@@ -15,6 +15,7 @@ import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
+import com.highcrit.ffacheckers.socket.utils.RankCalculator;
 import com.highcrit.ffacheckers.socket.utils.data.ActionFailed;
 
 public class Game {
@@ -140,7 +141,7 @@ public class Game {
         board.applyMove(move);
         lobby.send("game-move-result", new MoveResult(move));
         if (capturingMoveStrings.contains(tempMoveSequenceString)) {
-
+          checkPiecePromotion(move.getEnd());
           // Sequence complete
           startNextTurn();
         }
@@ -150,10 +151,20 @@ public class Game {
       if (normalMoves.contains(move)) {
         board.applyMove(move);
         lobby.send("game-move-result", new MoveResult(move));
+        checkPiecePromotion(move.getEnd());
         startNextTurn();
       } else {
         client.send("game-move-result", new ActionFailed("Invalid move"));
       }
+    }
+  }
+
+  private void checkPiecePromotion(int index) {
+    Piece piece = board.getGrid()[index];
+    if (RankCalculator.getRankFromIndexForColor(piece.getPlayerColor(), index) >= 10
+        && !piece.isKing()) {
+      piece.makeKing();
+      lobby.send("game-piece-promotion", index);
     }
   }
 
