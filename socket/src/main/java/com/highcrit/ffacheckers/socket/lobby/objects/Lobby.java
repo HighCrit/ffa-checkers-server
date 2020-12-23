@@ -10,6 +10,7 @@ import com.highcrit.ffacheckers.socket.game.objects.Game;
 import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyPlayers;
+import com.highcrit.ffacheckers.socket.server.objects.AIClient;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
@@ -20,15 +21,17 @@ import org.slf4j.LoggerFactory;
 
 public class Lobby {
   private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
-  private static final int LOBBY_MAX_IDLE_TIME = 10 * 60; // 10 minutes
+  private static final int LOBBY_MAX_IDLE_TIME = 30 * 60; // 10 minutes
   private static final TaskScheduler scheduler = new TaskScheduler();
 
   private final HashMap<UUID, AbstractClient> connectedClients = new HashMap<>();
+  private final LobbyManager lobbyManager;
 
   private final Game game = new Game(this);
   private final UUID code = UUID.randomUUID();
 
   public Lobby(LobbyManager lobbyManager) {
+    this.lobbyManager = lobbyManager;
     scheduler.scheduleTask(
         () -> {
           if (!this.game.hasStarted()) {
@@ -70,9 +73,13 @@ public class Lobby {
 
   public void removePlayer(PlayerClient info) {
     connectedClients.remove(info.getId());
-    game.removePlayer(info);
-    info.setHost(false);
-    sendPlayers();
+    if (connectedClients.values().stream().allMatch(c -> c instanceof AIClient)) {
+      lobbyManager.delete(code, "No players left");
+    } else {
+      game.removePlayer(info);
+      info.setHost(false);
+      sendPlayers();
+    }
   }
 
   public void delete() {

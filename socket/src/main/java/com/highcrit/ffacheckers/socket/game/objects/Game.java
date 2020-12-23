@@ -91,7 +91,7 @@ public class Game {
   public void startNextTurn() {
     currentPlayer = PlayerColor.values()[(currentPlayer.ordinal() + 1) % PlayerColor.values().length];
 
-    if (players.get(currentPlayer).hasLeft()) {
+    if (players.get(currentPlayer) == null || players.get(currentPlayer).hasLeft()) {
       if (board.getPieces().get(currentPlayer) != null) {
         board.removePlayer(currentPlayer);
         lobby.send("game-board", board.toFen());
@@ -175,7 +175,9 @@ public class Game {
       client.setLeft(true);
       players.remove(info.getPlayerColor());
 
-      hasGameEnded();
+      if (info.getPlayerColor() == currentPlayer) {
+        startNextTurn();
+      }
     }
   }
 

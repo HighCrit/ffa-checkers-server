@@ -38,11 +38,11 @@ public class LobbyManager {
     lobbies.remove(code);
   }
 
-  public boolean has(String code) {
+  public boolean has(UUID code) {
     return lobbies.containsKey(code);
   }
 
-  public Lobby get(String code) {
+  public Lobby get(UUID code) {
     return lobbies.get(code);
   }
 }
