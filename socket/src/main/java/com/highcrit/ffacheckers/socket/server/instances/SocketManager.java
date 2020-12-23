@@ -10,7 +10,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.socket.game.objects.listeners.OnGameLoaded;
 import com.highcrit.ffacheckers.socket.game.objects.listeners.OnMove;
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
+import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyAddAI;

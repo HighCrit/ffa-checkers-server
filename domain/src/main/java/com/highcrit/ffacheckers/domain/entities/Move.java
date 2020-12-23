@@ -1,15 +1,25 @@
-package com.highcrit.ffacheckers.socket.game.objects.moves;
+package com.highcrit.ffacheckers.domain.entities;
 
 import java.util.Objects;
 
-import com.highcrit.ffacheckers.socket.game.objects.Piece;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
+@Entity
 public class Move {
   private static final String FEN_CAPTURE_SYMBOL = "x";
   private static final String FEN_MOVE_SYMBOL = "-";
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
   private int start;
   private int end;
+
+  @OneToOne
   private Piece takes;
 
   public Move() {}

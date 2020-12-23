@@ -10,37 +10,37 @@
   </parent>
 
   <artifactId>api</artifactId>
-  <version>1.0</version>
-
-  <properties>
-    <spring.version>2.3.5.RELEASE</spring.version>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.highcrit.ffacheckers</groupId>
       <artifactId>domain</artifactId>
-      <version>1.0</version>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- Spring dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <artifactId>spring-boot-starter-data-rest</artifactId>
       <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-rest</artifactId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
       <version>${spring.version}</version>
     </dependency>
 
-    <!-- MySql -->
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.22</version>
-      <scope>runtime</scope>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+
+    <!-- MariaDB -->
+    <dependency>
+      <groupId>org.mariadb.jdbc</groupId>
+      <artifactId>mariadb-java-client</artifactId>
+      <version>2.7.1</version>
     </dependency>
 
     <!-- Dev tools -->
@@ -55,12 +55,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <version>${spring.version}</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.16</version>
       <optional>true</optional>
     </dependency>
 

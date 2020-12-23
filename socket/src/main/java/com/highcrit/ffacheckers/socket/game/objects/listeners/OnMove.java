@@ -3,7 +3,7 @@ package com.highcrit.ffacheckers.socket.game.objects.listeners;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
+import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import org.slf4j.Logger;

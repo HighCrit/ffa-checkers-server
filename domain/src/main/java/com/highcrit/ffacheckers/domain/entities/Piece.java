@@ -1,14 +1,25 @@
-package com.highcrit.ffacheckers.socket.game.objects;
+package com.highcrit.ffacheckers.domain.entities;
 
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 
+@Entity
 public class Piece {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
+
   private PlayerColor playerColor;
   private int position;
   private boolean isKing;
-  private boolean isGhost = false;
+
+  private transient boolean isGhost = false;
 
   public Piece() {
   }

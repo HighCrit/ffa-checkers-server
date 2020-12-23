@@ -8,10 +8,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
+import com.highcrit.ffacheckers.domain.entities.Piece;
 import com.highcrit.ffacheckers.socket.game.enums.GameState;
 import com.highcrit.ffacheckers.socket.game.instances.MoveCalculator;
 import com.highcrit.ffacheckers.socket.game.objects.data.MoveResult;
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
+import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;

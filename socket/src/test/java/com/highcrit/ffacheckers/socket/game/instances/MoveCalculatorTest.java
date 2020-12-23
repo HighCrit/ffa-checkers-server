@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.objects.Board;
-import com.highcrit.ffacheckers.socket.game.objects.Piece;
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
+import com.highcrit.ffacheckers.domain.entities.Piece;
+import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

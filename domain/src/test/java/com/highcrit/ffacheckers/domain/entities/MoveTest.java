@@ -1,9 +1,8 @@
-package com.highcrit.ffacheckers.socket.game.objects.moves;
+package com.highcrit.ffacheckers.domain.entities;
 
 import java.util.stream.Stream;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
-import com.highcrit.ffacheckers.socket.game.objects.Piece;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

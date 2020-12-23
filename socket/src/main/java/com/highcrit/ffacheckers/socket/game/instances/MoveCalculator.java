@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.enums.Direction;
 import com.highcrit.ffacheckers.socket.game.objects.Board;
-import com.highcrit.ffacheckers.socket.game.objects.Piece;
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
+import com.highcrit.ffacheckers.domain.entities.Piece;
+import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 
 public class MoveCalculator {

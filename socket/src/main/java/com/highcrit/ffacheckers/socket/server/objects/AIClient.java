@@ -3,7 +3,7 @@ package com.highcrit.ffacheckers.socket.server.objects;
 import java.util.List;
 import java.util.UUID;
 
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
+import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
 import org.slf4j.Logger;

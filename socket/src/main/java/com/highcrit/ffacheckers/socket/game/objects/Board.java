@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
-import com.highcrit.ffacheckers.socket.game.objects.moves.Move;
+import com.highcrit.ffacheckers.domain.entities.Move;
+import com.highcrit.ffacheckers.domain.entities.Piece;
 
 public class Board {
   public static final int BLACK_SQUARES = 162;
