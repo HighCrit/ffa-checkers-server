@@ -65,9 +65,7 @@ public class Board {
   }
 
   public void removePlayer(PlayerColor color) {
-    pieces.get(color).forEach(p -> {
-      grid[p.getPosition()] = null;
-    });
+    pieces.get(color).forEach(p -> grid[p.getPosition()] = null);
     pieces.remove(color);
   }
 

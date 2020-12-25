@@ -10,7 +10,7 @@ import com.highcrit.ffacheckers.domain.entities.Move;
 public class MoveSequence {
   private final LinkedList<Move> sequence;
 
-  public MoveSequence(LinkedList<Move> sequence) {
+  public MoveSequence(List<Move> sequence) {
     this.sequence = new LinkedList<>(sequence);
   }
 

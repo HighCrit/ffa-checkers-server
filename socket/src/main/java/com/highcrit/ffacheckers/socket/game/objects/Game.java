@@ -193,10 +193,11 @@ public class Game {
 
   public void hasGameEnded() {
     if (!hasStarted) return;
-    List<AbstractClient> players = this.players.values().stream().filter(p -> !p.hasLeft()).collect(Collectors.toList());
-    if (players.size() == 1) {
+    List<AbstractClient> playingPlayers =
+            this.players.values().stream().filter(p -> !p.hasLeft()).collect(Collectors.toList());
+    if (playingPlayers.size() == 1) {
       setGameState(GameState.ENDED);
-      lobby.send(GameEvent.WON, players.get(0).getPlayerColor());
+      lobby.send(GameEvent.WON, playingPlayers.get(0).getPlayerColor());
       WebManager.saveReplay(new Replay(lobby.getCode(), board.getMoveHistory()));
     }
   }
