@@ -2,13 +2,17 @@ package com.highcrit.ffacheckers.socket.server.enums;
 
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
 
-public enum SocketEvents implements Event {
+public enum SocketEvent implements Event {
+    /* Inbound */
     RESET_UUID("reset-uuid"),
-    UUID("uuid");
+    UUID("uuid"),
+
+    /* Outbound */
+    SEND_UUID("send-uuid");
 
     private final String eventName;
 
-    SocketEvents(String eventName) {
+    SocketEvent(String eventName) {
         this.eventName = eventName;
     }
 
