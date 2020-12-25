@@ -41,6 +41,11 @@ public class Lobby {
         LOBBY_MAX_IDLE_TIME);
   }
 
+  public void onPlayerLoaded(AbstractClient info) {
+    sendPlayers();
+    game.onPlayerLoaded(info);
+  }
+
   public void onPlayerDisconnect(AbstractClient info) {
     if (connectedClients.get(info.getId()) == null) {
       LOGGER.error("Tried to handle player disconnect that wasn't in this lobby");

@@ -1,4 +1,4 @@
-package com.highcrit.ffacheckers.socket.game.objects.listeners;
+package com.highcrit.ffacheckers.socket.lobby.objects.listeners;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -9,11 +9,11 @@ import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OnGameLoaded implements DataListener<Object> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(OnGameLoaded.class);
+public class OnLobbyLoaded implements DataListener<Object> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(OnLobbyLoaded.class);
   private final SocketManager socketManager;
 
-  public OnGameLoaded(SocketManager socketManager) {
+  public OnLobbyLoaded(SocketManager socketManager) {
     this.socketManager = socketManager;
   }
 
@@ -28,7 +28,7 @@ public class OnGameLoaded implements DataListener<Object> {
     }
 
     if (info.getLobby() != null) {
-      info.getLobby().getGame().onPlayerLoaded(info);
+      info.getLobby().onPlayerLoaded(info);
     } else {
       info.send("lobby-closing", new LobbyClosing("Lobby no longer exists"));
     }

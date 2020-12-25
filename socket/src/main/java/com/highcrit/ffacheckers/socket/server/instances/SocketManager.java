@@ -8,7 +8,7 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.highcrit.ffacheckers.socket.game.objects.listeners.OnGameLoaded;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLoaded;
 import com.highcrit.ffacheckers.socket.game.objects.listeners.OnMove;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
@@ -60,7 +60,7 @@ public class SocketManager {
         "lobby-join-action", LobbyJoinAction.class, new OnLobbyJoin(lobbyManager, this));
     addEventListener("lobby-leave-action", null, new OnLobbyLeave(this));
     addEventListener("lobby-add-ai-action", null, new OnLobbyAddAI(this));
-    addEventListener("game-loaded", null, new OnGameLoaded(this));
+    addEventListener("lobby-loaded", null, new OnLobbyLoaded(this));
     addEventListener("game-move-action", Move.class, new OnMove(this));
   }
 
