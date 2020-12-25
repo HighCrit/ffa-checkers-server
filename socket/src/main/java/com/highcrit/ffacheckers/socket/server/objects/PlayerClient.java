@@ -3,6 +3,7 @@ package com.highcrit.ffacheckers.socket.server.objects;
 import java.util.UUID;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,9 @@ public class PlayerClient extends AbstractClient {
   }
 
   @Override
-  public void send(String eventName, Object data) {
-    LOGGER.info(String.format("Sending event \"%s\" to socket id: %s", eventName, id));
-    socket.sendEvent(eventName, data);
+  public void send(Event event, Object data) {
+    LOGGER.info(String.format("Sending event \"%s\" to socket id: %s", event.getEventName(), id));
+    socket.sendEvent(event.getEventName(), data);
   }
 
   public boolean isHost() {

@@ -1,7 +1,7 @@
 package com.highcrit.ffacheckers.socket.game.objects.data;
 
 import com.highcrit.ffacheckers.domain.entities.Move;
-import com.highcrit.ffacheckers.socket.utils.data.Result;
+import com.highcrit.ffacheckers.domain.communication.objects.Result;
 
 public class MoveResult implements Result {
     private Move move;

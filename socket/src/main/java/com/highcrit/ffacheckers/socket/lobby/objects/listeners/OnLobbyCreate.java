@@ -3,11 +3,12 @@ package com.highcrit.ffacheckers.socket.lobby.objects.listeners;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
+import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.SocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
-import com.highcrit.ffacheckers.socket.utils.data.Result;
+import com.highcrit.ffacheckers.domain.communication.objects.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,6 @@ public class OnLobbyCreate implements DataListener<Object> {
     Lobby lobby = this.lobbyManager.create();
     Result result = lobby.addPlayer(info.getId(), info);
     info.setHost(true);
-    info.send("lobby-create-result", result);
+    info.send(LobbyEvent.CREATE_RESULT, result);
   }
 }

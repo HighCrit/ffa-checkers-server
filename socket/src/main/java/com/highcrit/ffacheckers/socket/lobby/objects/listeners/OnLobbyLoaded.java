@@ -3,8 +3,9 @@ package com.highcrit.ffacheckers.socket.lobby.objects.listeners;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
+import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.SocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class OnLobbyLoaded implements DataListener<Object> {
     if (info.getLobby() != null) {
       info.getLobby().onPlayerLoaded(info);
     } else {
-      info.send("lobby-closing", new LobbyClosing("Lobby no longer exists"));
+      info.send(LobbyEvent.CLOSING, new LobbyClosing("Lobby no longer exists"));
     }
   }
 }

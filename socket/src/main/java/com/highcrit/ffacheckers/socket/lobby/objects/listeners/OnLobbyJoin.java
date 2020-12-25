@@ -3,13 +3,14 @@ package com.highcrit.ffacheckers.socket.lobby.objects.listeners;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
+import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.SocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
-import com.highcrit.ffacheckers.socket.utils.data.ActionFailed;
-import com.highcrit.ffacheckers.socket.utils.data.Result;
+import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
+import com.highcrit.ffacheckers.domain.communication.objects.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,6 @@ public class OnLobbyJoin implements DataListener<LobbyJoinAction> {
       result = new ActionFailed("Invalid code - no lobby exists with code");
     }
 
-    info.send("lobby-join-result", result);
+    info.send(LobbyEvent.JOIN_RESULT, result);
   }
 }

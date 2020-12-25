@@ -1,11 +1,11 @@
-package com.highcrit.ffacheckers.socket.lobby.instances;
+package com.highcrit.ffacheckers.socket.lobby;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.SocketManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ public class LobbyManager {
       return;
     }
     LOGGER.info(String.format("Closing lobby {%s) with reason: %s", code, reason));
-    lobby.send("lobby-closing", new LobbyClosing(reason));
+    lobby.send(LobbyEvent.CLOSING, new LobbyClosing(reason));
     lobby.delete();
     socketManager.clearRoom(code);
     lobbies.remove(code);

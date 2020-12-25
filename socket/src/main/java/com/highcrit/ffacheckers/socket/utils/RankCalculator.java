@@ -3,6 +3,11 @@ package com.highcrit.ffacheckers.socket.utils;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 
 public class RankCalculator {
+
+    private RankCalculator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static int getRankFromIndexForColor(PlayerColor color, int index) {
         int row = index / 9;
         int col = (index % 9) * 2 + (row % 2);

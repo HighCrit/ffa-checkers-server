@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.highcrit.ffacheckers.domain.entities.Replay;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.domain.entities.Piece;
+import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
 import com.highcrit.ffacheckers.socket.game.enums.GameState;
 import com.highcrit.ffacheckers.socket.game.instances.MoveCalculator;
 import com.highcrit.ffacheckers.socket.game.objects.data.MoveResult;
@@ -17,7 +19,8 @@ import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.utils.RankCalculator;
-import com.highcrit.ffacheckers.socket.utils.data.ActionFailed;
+import com.highcrit.ffacheckers.socket.utils.WebManager;
+import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 
 public class Game {
   public static final int MAX_PLAYERS = 4;
@@ -50,7 +53,7 @@ public class Game {
     hasStarted = true;
     board = Board.fromFen(fen);
     setGameState(GameState.PLAYING);
-    lobby.send("game-board", board.toFen());
+    lobby.send(GameEvent.BOARD, board.toFen());
     startNextTurn();
   }
 
@@ -62,15 +65,15 @@ public class Game {
               abstractPlayerClient.setLoaded(true);
               abstractPlayerClient.setLeft(false);
             });
-    info.send("game-your-color", info.getPlayerColor());
+    info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
     if (hasStarted) {
-      info.send("game-state", gameState);
-      info.send("game-your-color", info.getPlayerColor());
-      info.send("game-board", board.toFen());
-      info.send("game-current-player", currentPlayer);
+      info.send(GameEvent.STATE, gameState);
+      info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
+      info.send(GameEvent.BOARD, board.toFen());
+      info.send(GameEvent.CURRENT_PLAYER, currentPlayer);
 
       if (currentPlayer == info.getPlayerColor()) {
-        info.send("game-move-set", capturingMoves.isEmpty() ? normalMoves : capturingMoves);
+        info.send(GameEvent.MOVE_SET, capturingMoves.isEmpty() ? normalMoves : capturingMoves);
       }
     } else {
       if (players.values().stream().allMatch(AbstractClient::isLoaded) && players.size() == MAX_PLAYERS) {
@@ -90,12 +93,16 @@ public class Game {
   }
 
   public void startNextTurn() {
+    // Set currentPlayer to next color
     currentPlayer = PlayerColor.values()[(currentPlayer.ordinal() + 1) % PlayerColor.values().length];
 
+    // If the current player doesn't exist or has left
     if (players.get(currentPlayer) == null || players.get(currentPlayer).hasLeft()) {
+      // But they still have pieces on the board
       if (board.getPieces().get(currentPlayer) != null) {
+        // Remove them and re-emit the board
         board.removePlayer(currentPlayer);
-        lobby.send("game-board", board.toFen());
+        lobby.send(GameEvent.BOARD, board.toFen());
         hasGameEnded();
       }
       startNextTurn();
@@ -105,30 +112,32 @@ public class Game {
     capturingMoves = MOVE_CALCULATOR.getCapturingMoves(board, currentPlayer);
     capturingMoveStrings = capturingMoves.stream().map(MoveSequence::toString).collect(Collectors.toList());
 
+    // If no jumps are possible
     if (capturingMoves.isEmpty()) {
+      // Calculate normal moves
       normalMoves = MOVE_CALCULATOR.getNormalMoves(board, currentPlayer);
       if (normalMoves.isEmpty()) {
         // Player lost, no legal moves available
         players.get(currentPlayer).setLeft(true);
         board.removePlayer(currentPlayer);
-        lobby.send("game-board", board.toFen());
+        lobby.send(GameEvent.BOARD, board.toFen());
         startNextTurn();
         hasGameEnded();
       } else {
-        lobby.send("game-current-player", currentPlayer);
-        players.get(currentPlayer).send("game-move-set", normalMoves);
+        lobby.send(GameEvent.CURRENT_PLAYER, currentPlayer);
+        players.get(currentPlayer).send(GameEvent.MOVE_SET, normalMoves);
       }
     } else {
       normalMoves.clear();
       lastMoveSequence = new MoveSequence();
-      lobby.send("game-current-player", currentPlayer);
-      players.get(currentPlayer).send("game-move-set", capturingMoves);
+      lobby.send(GameEvent.CURRENT_PLAYER, currentPlayer);
+      players.get(currentPlayer).send(GameEvent.MOVE_SET, capturingMoves);
     }
   }
 
   public void onMove(AbstractClient client, Move move) {
     if (currentPlayer != client.getPlayerColor() || move.getStart() < 0 || move.getStart() > 161 || move.getEnd() < 0 || move.getEnd() > 161) {
-      client.send("game-move-result", new ActionFailed("Invalid move"));
+      client.send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
       return;
     }
 
@@ -140,7 +149,7 @@ public class Game {
       if (capturingMoveStrings.stream().anyMatch(ms -> ms.startsWith(tempMoveSequenceString))) {
         // Execute, it's either a or a start of a valid sequence
         board.applyMove(move);
-        lobby.send("game-move-result", new MoveResult(move));
+        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(move));
         if (capturingMoveStrings.contains(tempMoveSequenceString)) {
           checkPiecePromotion(move.getEnd());
           // Sequence complete
@@ -151,11 +160,11 @@ public class Game {
       // Normal moves
       if (normalMoves.contains(move)) {
         board.applyMove(move);
-        lobby.send("game-move-result", new MoveResult(move));
+        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(move));
         checkPiecePromotion(move.getEnd());
         startNextTurn();
       } else {
-        client.send("game-move-result", new ActionFailed("Invalid move"));
+        client.send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
       }
     }
   }
@@ -165,7 +174,7 @@ public class Game {
     if (RankCalculator.getRankFromIndexForColor(piece.getPlayerColor(), index) >= 10
         && !piece.isKing()) {
       piece.makeKing();
-      lobby.send("game-piece-promotion", index);
+      lobby.send(GameEvent.PIECE_PROMOTION, index);
     }
   }
 
@@ -187,13 +196,14 @@ public class Game {
     List<AbstractClient> players = this.players.values().stream().filter(p -> !p.hasLeft()).collect(Collectors.toList());
     if (players.size() == 1) {
       setGameState(GameState.ENDED);
-      lobby.send("game-won-by", players.get(0).getPlayerColor());
+      lobby.send(GameEvent.WON, players.get(0).getPlayerColor());
+      WebManager.saveReplay(new Replay(lobby.getCode(), board.getMoveHistory()));
     }
   }
 
   private void setGameState(GameState gameState) {
     this.gameState = gameState;
-    lobby.send("game-state", gameState);
+    lobby.send(GameEvent.STATE, gameState);
   }
 
   public boolean hasStarted() {
@@ -202,9 +212,5 @@ public class Game {
 
   public Map<PlayerColor, AbstractClient> getPlayers() {
     return players;
-  }
-
-  public Board getBoard() {
-    return board;
   }
 }

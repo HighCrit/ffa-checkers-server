@@ -1,4 +1,4 @@
-package com.highcrit.ffacheckers.socket.utils.data;
+package com.highcrit.ffacheckers.domain.communication.objects;
 
 public class ActionFailed implements Result {
   private final String message;

@@ -1,4 +1,4 @@
-package com.highcrit.ffacheckers.socket.server.instances;
+package com.highcrit.ffacheckers.socket.server;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -8,16 +8,20 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
+import com.highcrit.ffacheckers.domain.communication.objects.Event;
+import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
+import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLoaded;
 import com.highcrit.ffacheckers.socket.game.objects.listeners.OnMove;
 import com.highcrit.ffacheckers.domain.entities.Move;
-import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyAddAI;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyCreate;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyJoin;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLeave;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
+import com.highcrit.ffacheckers.socket.server.enums.SocketEvent;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnConnection;
@@ -53,20 +57,20 @@ public class SocketManager {
   private void registerEventListeners() {
     server.addConnectListener(new OnConnection());
     server.addDisconnectListener(new OnDisconnection(this));
-    addEventListener("uuid", UID.class, new OnUUID(this));
-    addEventListener("reset-uuid", UID.class, new OnResetUUID(this));
-    addEventListener("lobby-create-action", null, new OnLobbyCreate(lobbyManager, this));
+    addEventListener(SocketEvent.UUID, UID.class, new OnUUID(this));
+    addEventListener(SocketEvent.RESET_UUID, UID.class, new OnResetUUID(this));
+    addEventListener(LobbyEvent.CREATE_ACTION, null, new OnLobbyCreate(lobbyManager, this));
     addEventListener(
-        "lobby-join-action", LobbyJoinAction.class, new OnLobbyJoin(lobbyManager, this));
-    addEventListener("lobby-leave-action", null, new OnLobbyLeave(this));
-    addEventListener("lobby-add-ai-action", null, new OnLobbyAddAI(this));
-    addEventListener("lobby-loaded", null, new OnLobbyLoaded(this));
-    addEventListener("game-move-action", Move.class, new OnMove(this));
+        LobbyEvent.JOIN_ACTION, LobbyJoinAction.class, new OnLobbyJoin(lobbyManager, this));
+    addEventListener(LobbyEvent.LEAVE, null, new OnLobbyLeave(this));
+    addEventListener(LobbyEvent.ADD_AI_ACTION, null, new OnLobbyAddAI(this));
+    addEventListener(LobbyEvent.LOADED, null, new OnLobbyLoaded(this));
+    addEventListener(GameEvent.MOVE_ACTION, Move.class, new OnMove(this));
   }
 
-  public <T> void addEventListener(String eventName, Class<T> dto, DataListener<T> listener) {
-    LOGGER.info(String.format("Registering listener for event: %s", eventName));
-    server.addEventListener(eventName, dto, listener);
+  public <T> void addEventListener(Event event, Class<T> dto, DataListener<T> listener) {
+    LOGGER.info(String.format("Registering listener for event: %s", event));
+    server.addEventListener(event.getEventName(), dto, listener);
   }
 
   public boolean has(UUID id) {

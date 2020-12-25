@@ -1,6 +1,6 @@
 package com.highcrit.ffacheckers.socket;
 
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.SocketManager;
 
 public class SocketServerInitializer {
   public static void main(String[] args) {

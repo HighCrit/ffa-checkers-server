@@ -2,7 +2,7 @@ package com.highcrit.ffacheckers.socket.lobby.objects.data;
 
 import java.util.UUID;
 
-import com.highcrit.ffacheckers.socket.utils.data.Result;
+import com.highcrit.ffacheckers.domain.communication.objects.Result;
 
 public class LobbyJoinResult implements Result {
   private final UUID code;

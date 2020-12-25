@@ -4,7 +4,7 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.domain.entities.Move;
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.SocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

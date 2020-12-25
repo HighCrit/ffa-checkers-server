@@ -2,6 +2,7 @@ package com.highcrit.ffacheckers.socket.server.objects;
 
 import java.util.UUID;
 
+import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
@@ -20,7 +21,7 @@ public abstract class AbstractClient {
     this.id = id;
   }
 
-  public abstract void send(String eventName, Object data);
+  public abstract void send(Event event, Object data);
 
   public ConnectionState getState() {
     return state;

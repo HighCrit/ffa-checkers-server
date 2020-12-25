@@ -1,7 +1,7 @@
 package com.highcrit.ffacheckers.socket.lobby.objects.data;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
-import com.highcrit.ffacheckers.socket.utils.data.Result;
+import com.highcrit.ffacheckers.domain.communication.objects.Result;
 
 public class LobbyAddAIResult implements Result {
     private PlayerColor playerColor;

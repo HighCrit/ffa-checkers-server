@@ -8,18 +8,18 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Game {
+public class Replay {
     @Id
     private UUID id;
     @OneToMany
     private List<Move> moves;
 
-    public Game(UUID id, List<Move> moves) {
+    public Replay(UUID id, List<Move> moves) {
         this.id = id;
         this.moves = moves;
     }
 
-    public Game() {
+    public Replay() {
 
     }
 
@@ -29,5 +29,9 @@ public class Game {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public List<Move> getMoves() {
+        return moves;
     }
 }

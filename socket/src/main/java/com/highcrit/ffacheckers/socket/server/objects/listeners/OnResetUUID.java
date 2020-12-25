@@ -3,7 +3,8 @@ package com.highcrit.ffacheckers.socket.server.objects.listeners;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.highcrit.ffacheckers.socket.server.instances.SocketManager;
+import com.highcrit.ffacheckers.socket.server.SocketManager;
+import com.highcrit.ffacheckers.socket.server.enums.SocketEvent;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 
@@ -26,6 +27,6 @@ public class OnResetUUID implements DataListener<UID> {
 
     this.socketManager.remove(info.getId());
     UID id = this.socketManager.registerClient(socketIOClient, null);
-    info.send("uuid", id);
+    info.send(SocketEvent.UUID, id);
   }
 }

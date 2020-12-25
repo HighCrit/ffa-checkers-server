@@ -119,4 +119,8 @@ public class Board {
   public Map<PlayerColor, List<Piece>> getPieces() {
     return pieces;
   }
+
+  public List<Move> getMoveHistory() {
+    return moveHistory;
+  }
 }

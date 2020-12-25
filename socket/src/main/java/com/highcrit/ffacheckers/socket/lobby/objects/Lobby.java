@@ -5,17 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.objects.Game;
-import com.highcrit.ffacheckers.socket.lobby.instances.LobbyManager;
+import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyPlayers;
 import com.highcrit.ffacheckers.socket.server.objects.AIClient;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
-import com.highcrit.ffacheckers.socket.utils.data.ActionFailed;
-import com.highcrit.ffacheckers.socket.utils.data.Result;
+import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
+import com.highcrit.ffacheckers.domain.communication.objects.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,12 +54,12 @@ public class Lobby {
       return;
     }
     // TODO: Send info on disconnected player
-    send("lobby-player-disconnected", null);
+    send(LobbyEvent.PLAYER_DISCONNECT, null);
   }
 
   public void onPlayerReconnect(PlayerClient info) {
     game.onPlayerLoaded(info);
-    info.send("lobby-reconnect", new LobbyJoinResult(code));
+    info.send(LobbyEvent.PLAYER_RECONNECT, new LobbyJoinResult(code));
 
     info.setLobby(this);
     sendPlayers();
@@ -91,8 +93,8 @@ public class Lobby {
     connectedClients.values().forEach(s -> s.setLobby(null));
   }
 
-  public void send(String eventName, Object data) {
-    connectedClients.values().forEach(s -> s.send(eventName, data));
+  public void send(Event event, Object data) {
+    connectedClients.values().forEach(s -> s.send(event, data));
   }
 
   public UUID getCode() {
@@ -106,6 +108,6 @@ public class Lobby {
   private void sendPlayers() {
     Map<PlayerColor, String> players = new EnumMap<>(PlayerColor.class);
     game.getPlayers().forEach((color, player) -> players.put(color, player.getName()));
-    send("lobby-player-joined", new LobbyPlayers(players));
+    send(LobbyEvent.PLAYER_JOINED, new LobbyPlayers(players));
   }
 }
