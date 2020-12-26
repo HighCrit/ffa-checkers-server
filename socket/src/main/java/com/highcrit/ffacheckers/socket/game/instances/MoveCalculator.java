@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.highcrit.ffacheckers.domain.entities.Move;
+import com.highcrit.ffacheckers.domain.entities.Piece;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.enums.Direction;
 import com.highcrit.ffacheckers.socket.game.objects.Board;
-import com.highcrit.ffacheckers.domain.entities.Piece;
-import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 
 public class MoveCalculator {
@@ -30,11 +30,18 @@ public class MoveCalculator {
 
   public List<MoveSequence> getCapturingMoves(Board board, PlayerColor playerColor) {
     List<MoveSequence> moveSequences = new ArrayList<>();
+    List<Piece> deSyncedPieces = new ArrayList<>();
 
-    board
-        .getPieces()
-        .get(playerColor)
-        .forEach(piece -> getMoveSequenceOfPiece(board, piece, new LinkedList<>(), moveSequences));
+    for (Piece piece : board.getPieces().get(playerColor)) {
+      Piece p = board.getGrid()[piece.getPosition()];
+      if (p == null) {
+        deSyncedPieces.add(piece);
+      } else {
+        getMoveSequenceOfPiece(board, p, new LinkedList<>(), moveSequences);
+      }
+    }
+
+    board.getPieces().get(playerColor).removeAll(deSyncedPieces);
 
     // Only longest sequence may be played
     int maxLength =

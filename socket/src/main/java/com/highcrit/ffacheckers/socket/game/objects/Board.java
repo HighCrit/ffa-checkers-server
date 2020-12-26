@@ -11,9 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.domain.entities.Piece;
+import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 
 public class Board {
   public static final int BLACK_SQUARES = 162;
@@ -25,9 +25,11 @@ public class Board {
   private final Piece[] grid = new Piece[BLACK_SQUARES];
   private final EnumMap<PlayerColor, List<Piece>> pieces = new EnumMap<>(PlayerColor.class);
   private final LinkedList<Move> moveHistory = new LinkedList<>();
+  private final String initialFen;
 
   public Board(List<Piece> pieces) {
     placePieces(pieces);
+    this.initialFen = this.toFen();
   }
 
   public static Board fromFen(String fen) {
@@ -120,5 +122,9 @@ public class Board {
 
   public List<Move> getMoveHistory() {
     return moveHistory;
+  }
+
+  public String getInitialFen() {
+    return initialFen;
   }
 }

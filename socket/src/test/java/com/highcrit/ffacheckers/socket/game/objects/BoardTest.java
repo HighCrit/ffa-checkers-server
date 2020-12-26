@@ -3,8 +3,8 @@ package com.highcrit.ffacheckers.socket.game.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.domain.entities.Piece;
+import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -7,5 +7,4 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @EntityScan("com.highcrit.ffacheckers.domain.entities")
-public class SpringConfiguration {
-}
+public class SpringConfiguration {}

@@ -32,13 +32,18 @@ public class AIClient extends AbstractClient {
     } else if (GameEvent.MOVE_SET.equals(event)) {
       LOGGER.info(String.format("%s bot received event \"%s\"", playerColor, event.getEventName()));
       // Add some time so the humans can follow our movements
-      SCHEDULER.scheduleTask(() -> {
-        if (((List<Object>) data).get(0) instanceof MoveSequence) {
-          ((List<MoveSequence>) data).get(0).getSequence().forEach(m -> getLobby().getGame().onMove(this, m));
-        } else {
-          getLobby().getGame().onMove(this, ((List<Move>) data).get(0));
-        }
-      }, 1);
+      SCHEDULER.scheduleTask(
+          () -> {
+            if (((List<Object>) data).get(0) instanceof MoveSequence) {
+              ((List<MoveSequence>) data)
+                  .get(0)
+                  .getSequence()
+                  .forEach(m -> getLobby().getGame().onMove(this, m));
+            } else {
+              getLobby().getGame().onMove(this, ((List<Move>) data).get(0));
+            }
+          },
+          1);
     }
   }
 }

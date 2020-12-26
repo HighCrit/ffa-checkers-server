@@ -16,11 +16,11 @@ public class Move {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
+
   private int start;
   private int end;
 
-  @OneToOne
-  private Piece takes;
+  @OneToOne private Piece takes;
 
   public Move() {}
 

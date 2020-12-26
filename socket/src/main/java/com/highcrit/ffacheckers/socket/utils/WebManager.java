@@ -31,7 +31,7 @@ public class WebManager {
       HttpRequest request =
           HttpRequest.newBuilder()
               .uri(URI.create(REPLAY_URL))
-              .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+              .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
               .build();
 
       client.sendAsync(request, HttpResponse.BodyHandlers.ofString());

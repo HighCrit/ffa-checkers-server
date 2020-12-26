@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
+import com.highcrit.ffacheckers.domain.communication.objects.Result;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.objects.Game;
 import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
@@ -16,8 +18,6 @@ import com.highcrit.ffacheckers.socket.server.objects.AIClient;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
-import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
-import com.highcrit.ffacheckers.domain.communication.objects.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,6 +103,10 @@ public class Lobby {
 
   public Game getGame() {
     return game;
+  }
+
+  public LobbyManager getLobbyManager() {
+    return lobbyManager;
   }
 
   private void sendPlayers() {

@@ -7,5 +7,4 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReplayRepository extends PagingAndSortingRepository<Replay, UUID> {
-}
+public interface ReplayRepository extends PagingAndSortingRepository<Replay, UUID> {}

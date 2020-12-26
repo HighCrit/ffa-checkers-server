@@ -1,25 +1,25 @@
 package com.highcrit.ffacheckers.socket.game.objects.data;
 
-import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.domain.communication.objects.Result;
+import com.highcrit.ffacheckers.domain.entities.Move;
 
 public class MoveResult implements Result {
-    private Move move;
+  private Move move;
 
-    public MoveResult(Move move) {
-        this.move = move;
-    }
+  public MoveResult(Move move) {
+    this.move = move;
+  }
 
-    public Move getMove() {
-        return move;
-    }
+  public Move getMove() {
+    return move;
+  }
 
-    public void setMove(Move move) {
-        this.move = move;
-    }
+  public void setMove(Move move) {
+    this.move = move;
+  }
 
-    @Override
-    public boolean isSuccess() {
-        return true;
-    }
+  @Override
+  public boolean isSuccess() {
+    return true;
+  }
 }

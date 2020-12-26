@@ -9,29 +9,39 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Replay {
-    @Id
-    private UUID id;
-    @OneToMany
-    private List<Move> moves;
+  @Id private UUID id;
+  private String initialFen;
+  @OneToMany private List<Move> moves;
 
-    public Replay(UUID id, List<Move> moves) {
-        this.id = id;
-        this.moves = moves;
-    }
+  public Replay(UUID id, String initialFen, List<Move> moves) {
+    this.id = id;
+    this.initialFen = initialFen;
+    this.moves = moves;
+  }
 
-    public Replay() {
+  public Replay() {}
 
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public UUID getId() {
-        return id;
-    }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+  public String getInitialFen() {
+    return initialFen;
+  }
 
-    public List<Move> getMoves() {
-        return moves;
-    }
+  public void setInitialFen(String initialFen) {
+    this.initialFen = initialFen;
+  }
+
+  public List<Move> getMoves() {
+    return moves;
+  }
+
+  public void setMoves(List<Move> moves) {
+    this.moves = moves;
+  }
 }

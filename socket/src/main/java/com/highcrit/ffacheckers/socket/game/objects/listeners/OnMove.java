@@ -10,25 +10,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OnMove implements DataListener<Move> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OnMove.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OnMove.class);
 
-    private final SocketManager socketManager;
+  private final SocketManager socketManager;
 
-    public OnMove(SocketManager socketManager) {
-        this.socketManager = socketManager;
+  public OnMove(SocketManager socketManager) {
+    this.socketManager = socketManager;
+  }
+
+  @Override
+  public void onData(SocketIOClient socketIOClient, Move move, AckRequest ackRequest)
+      throws Exception {
+    PlayerClient client = socketManager.getInfoByClient(socketIOClient);
+    if (client == null) {
+      LOGGER.error("Tried to handle event of socket that has not been registered");
+      socketIOClient.sendEvent("send-uuid");
+      return;
     }
 
-    @Override
-    public void onData(SocketIOClient socketIOClient, Move move, AckRequest ackRequest) throws Exception {
-        PlayerClient client = socketManager.getInfoByClient(socketIOClient);
-        if (client == null) {
-            LOGGER.error("Tried to handle event of socket that has not been registered");
-            socketIOClient.sendEvent("send-uuid");
-            return;
-        }
-
-        if (client.getLobby() != null) {
-            client.getLobby().getGame().onMove(client, move);
-        }
+    if (client.getLobby() != null) {
+      client.getLobby().getGame().onMove(client, move);
     }
+  }
 }

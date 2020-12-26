@@ -21,8 +21,7 @@ public class Piece {
 
   private transient boolean isGhost = false;
 
-  public Piece() {
-  }
+  public Piece() {}
 
   public Piece(PlayerColor playerColor, int position, boolean isKing) {
     this.playerColor = playerColor;

@@ -7,20 +7,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
+import com.highcrit.ffacheckers.domain.entities.Move;
+import com.highcrit.ffacheckers.domain.entities.Piece;
 import com.highcrit.ffacheckers.domain.entities.Replay;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
-import com.highcrit.ffacheckers.domain.entities.Piece;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
 import com.highcrit.ffacheckers.socket.game.enums.GameState;
 import com.highcrit.ffacheckers.socket.game.instances.MoveCalculator;
 import com.highcrit.ffacheckers.socket.game.objects.data.MoveResult;
-import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.utils.RankCalculator;
 import com.highcrit.ffacheckers.socket.utils.WebManager;
-import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 
 public class Game {
   public static final int MAX_PLAYERS = 4;
@@ -59,14 +59,15 @@ public class Game {
 
   public void onPlayerLoaded(AbstractClient info) {
     players.values().stream()
-            .filter(info::equals)
-            .findFirst()
-            .ifPresent(abstractPlayerClient -> {
+        .filter(info::equals)
+        .findFirst()
+        .ifPresent(
+            abstractPlayerClient -> {
               abstractPlayerClient.setLoaded(true);
               abstractPlayerClient.setLeft(false);
             });
     info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
-    if (hasStarted) {
+    if (gameState == GameState.PLAYING) {
       info.send(GameEvent.STATE, gameState);
       info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
       info.send(GameEvent.BOARD, board.toFen());
@@ -76,7 +77,8 @@ public class Game {
         info.send(GameEvent.MOVE_SET, capturingMoves.isEmpty() ? normalMoves : capturingMoves);
       }
     } else {
-      if (players.values().stream().allMatch(AbstractClient::isLoaded) && players.size() == MAX_PLAYERS) {
+      if (players.values().stream().allMatch(AbstractClient::isLoaded)
+          && players.size() == MAX_PLAYERS) {
         start(DEFAULT_FEN);
       }
     }
@@ -94,7 +96,8 @@ public class Game {
 
   public void startNextTurn() {
     // Set currentPlayer to next color
-    currentPlayer = PlayerColor.values()[(currentPlayer.ordinal() + 1) % PlayerColor.values().length];
+    currentPlayer =
+        PlayerColor.values()[(currentPlayer.ordinal() + 1) % PlayerColor.values().length];
 
     // If the current player doesn't exist or has left
     if (players.get(currentPlayer) == null || players.get(currentPlayer).hasLeft()) {
@@ -110,7 +113,8 @@ public class Game {
     }
 
     capturingMoves = MOVE_CALCULATOR.getCapturingMoves(board, currentPlayer);
-    capturingMoveStrings = capturingMoves.stream().map(MoveSequence::toString).collect(Collectors.toList());
+    capturingMoveStrings =
+        capturingMoves.stream().map(MoveSequence::toString).collect(Collectors.toList());
 
     // If no jumps are possible
     if (capturingMoves.isEmpty()) {
@@ -121,8 +125,8 @@ public class Game {
         players.get(currentPlayer).setLeft(true);
         board.removePlayer(currentPlayer);
         lobby.send(GameEvent.BOARD, board.toFen());
-        startNextTurn();
         hasGameEnded();
+        startNextTurn();
       } else {
         lobby.send(GameEvent.CURRENT_PLAYER, currentPlayer);
         players.get(currentPlayer).send(GameEvent.MOVE_SET, normalMoves);
@@ -136,7 +140,11 @@ public class Game {
   }
 
   public void onMove(AbstractClient client, Move move) {
-    if (currentPlayer != client.getPlayerColor() || move.getStart() < 0 || move.getStart() > 161 || move.getEnd() < 0 || move.getEnd() > 161) {
+    if (currentPlayer != client.getPlayerColor()
+        || move.getStart() < 0
+        || move.getStart() > 161
+        || move.getEnd() < 0
+        || move.getEnd() > 161) {
       client.send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
       return;
     }
@@ -155,6 +163,8 @@ public class Game {
           // Sequence complete
           startNextTurn();
         }
+      } else {
+        lastMoveSequence.undoMove();
       }
     } else {
       // Normal moves
@@ -171,6 +181,9 @@ public class Game {
 
   private void checkPiecePromotion(int index) {
     Piece piece = board.getGrid()[index];
+    if (piece == null) {
+      return;
+    }
     if (RankCalculator.getRankFromIndexForColor(piece.getPlayerColor(), index) >= 10
         && !piece.isKing()) {
       piece.makeKing();
@@ -194,11 +207,13 @@ public class Game {
   public void hasGameEnded() {
     if (!hasStarted) return;
     List<AbstractClient> playingPlayers =
-            this.players.values().stream().filter(p -> !p.hasLeft()).collect(Collectors.toList());
+        this.players.values().stream().filter(p -> !p.hasLeft()).collect(Collectors.toList());
     if (playingPlayers.size() == 1) {
       setGameState(GameState.ENDED);
       lobby.send(GameEvent.WON, playingPlayers.get(0).getPlayerColor());
-      WebManager.saveReplay(new Replay(lobby.getCode(), board.getMoveHistory()));
+      WebManager.saveReplay(
+          new Replay(lobby.getCode(), board.getInitialFen(), board.getMoveHistory()));
+      lobby.getLobbyManager().delete(lobby.getCode(), "Game Ended");
     }
   }
 
