@@ -21,8 +21,6 @@ public class WebManager {
   }
 
   public static void saveReplay(Replay replay) {
-    LOGGER.info(String.format("Saving replay with id: %s", replay.getId()));
-
     try {
       ObjectMapper objectMapper = new ObjectMapper();
       String requestBody = objectMapper.writeValueAsString(replay);
@@ -31,10 +29,19 @@ public class WebManager {
       HttpRequest request =
           HttpRequest.newBuilder()
               .uri(URI.create(REPLAY_URL))
-              .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
+              .POST(HttpRequest.BodyPublishers.ofString(requestBody))
               .build();
 
-      client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+      client
+          .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+          .thenApply(
+              response -> {
+                LOGGER.info(
+                    String.format(
+                        "Saving replay with id: %s returned status code: %d",
+                        replay.getId(), response.statusCode()));
+                return response;
+              });
     } catch (JsonProcessingException ex) {
       LOGGER.error(String.format("Failed to save replay with id: %s", replay.getId()));
       ex.printStackTrace();
