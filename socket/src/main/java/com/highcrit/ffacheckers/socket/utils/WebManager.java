@@ -36,10 +36,15 @@ public class WebManager {
           .sendAsync(request, HttpResponse.BodyHandlers.ofString())
           .thenApply(
               response -> {
-                LOGGER.info(
+                String message =
                     String.format(
                         "Saving replay with id: %s returned status code: %d",
-                        replay.getId(), response.statusCode()));
+                        replay.getId(), response.statusCode());
+                if (response.statusCode() / 100 == 2) {
+                  LOGGER.info(message);
+                } else {
+                  LOGGER.error(message);
+                }
                 return response;
               });
     } catch (JsonProcessingException ex) {
