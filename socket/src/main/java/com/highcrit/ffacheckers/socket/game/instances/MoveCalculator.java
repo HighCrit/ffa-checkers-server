@@ -13,6 +13,7 @@ import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.enums.Direction;
 import com.highcrit.ffacheckers.socket.game.objects.Board;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
+import com.highcrit.ffacheckers.socket.utils.RankCalculator;
 
 public class MoveCalculator {
   private static final EnumMap<PlayerColor, List<Direction>> playerDirectionMap =
@@ -83,6 +84,12 @@ public class MoveCalculator {
       }
     }
     if (!jumpFound && !pastMoves.isEmpty()) {
+      if (!piece.isKing()
+          && RankCalculator.getRankFromIndexForColor(
+                  piece.getPlayerColor(), pastMoves.getLast().getEnd())
+              >= 10) {
+        pastMoves.getLast().setPromoting(true);
+      }
       moveSequences.add(new MoveSequence(pastMoves));
     }
   }
@@ -97,7 +104,11 @@ public class MoveCalculator {
             if (piece.isKing() || playerDirectionMap.get(playerColor).contains(dir)) {
               int posInDir = dir.getIndexInDirectionFrom(piece.getPosition());
               if (posInDir != -1 && board.getGrid()[posInDir] == null) {
-                moves.add(new Move(piece.getPosition(), posInDir));
+                moves.add(
+                    new Move(
+                        piece.getPosition(),
+                        posInDir,
+                        RankCalculator.getRankFromIndexForColor(playerColor, posInDir) >= 10));
               }
             }
           }

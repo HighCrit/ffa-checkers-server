@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 import com.highcrit.ffacheckers.domain.entities.Move;
-import com.highcrit.ffacheckers.domain.entities.Piece;
 import com.highcrit.ffacheckers.domain.entities.Replay;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
@@ -19,7 +18,6 @@ import com.highcrit.ffacheckers.socket.game.objects.data.MoveResult;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
-import com.highcrit.ffacheckers.socket.utils.RankCalculator;
 import com.highcrit.ffacheckers.socket.utils.WebManager;
 
 public class Game {
@@ -140,54 +138,60 @@ public class Game {
   }
 
   public void onMove(AbstractClient client, Move move) {
-    if (currentPlayer != client.getPlayerColor()
-        || move.getStart() < 0
-        || move.getStart() > 161
-        || move.getEnd() < 0
-        || move.getEnd() > 161) {
-      client.send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
+    if (currentPlayer != client.getPlayerColor()) {
+      client.send(GameEvent.MOVE_RESULT, new ActionFailed("It's not your turn"));
       return;
     }
 
-    // Check if move is legal
+    // Check whether we expect a capturing move or not
     if (normalMoves.isEmpty()) {
-      // Sequences
+      // Construct sequence using past moves
       lastMoveSequence.addMove(move);
       String tempMoveSequenceString = lastMoveSequence.toString();
-      if (capturingMoveStrings.stream().anyMatch(ms -> ms.startsWith(tempMoveSequenceString))) {
-        // Execute, it's either a or a start of a valid sequence
-        board.applyMove(move);
-        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(move));
-        if (capturingMoveStrings.contains(tempMoveSequenceString)) {
-          checkPiecePromotion(move.getEnd());
-          // Sequence complete
+      // Find sequence in expected sequences using constructed sequence
+      MoveSequence ms =
+          capturingMoves.stream()
+              .filter(s -> s.toString().startsWith(tempMoveSequenceString))
+              .findFirst()
+              .orElse(null);
+      // If sequence is valid
+      if (ms != null) {
+        // Get current move to execute
+        Move cMove = ms.getSequence().get(lastMoveSequence.length() - 1);
+        board.applyMove(cMove);
+        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(cMove));
+        // Check is sequence has been completed
+        if (ms.toString().equals(tempMoveSequenceString)) {
+          // Only promote at end of sequence
+          if (cMove.isPromoting()) {
+            board.getGrid()[cMove.getEnd()].makeKing();
+          }
           startNextTurn();
         }
       } else {
+        // No sequence was found
         lastMoveSequence.undoMove();
       }
     } else {
       // Normal moves
-      if (normalMoves.contains(move)) {
-        board.applyMove(move);
-        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(move));
-        checkPiecePromotion(move.getEnd());
+      // Find fully constructed move from given move
+      Move nMove =
+          normalMoves.stream()
+              .filter(m -> m.toString().equals(move.toString()))
+              .findFirst()
+              .orElse(null);
+      // Check if move was found
+      if (nMove != null) {
+        board.applyMove(nMove);
+        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(nMove));
+        if (nMove.isPromoting()) {
+          board.getGrid()[nMove.getEnd()].makeKing();
+        }
         startNextTurn();
       } else {
+        // No valid moves were found for given move information
         client.send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
       }
-    }
-  }
-
-  private void checkPiecePromotion(int index) {
-    Piece piece = board.getGrid()[index];
-    if (piece == null) {
-      return;
-    }
-    if (RankCalculator.getRankFromIndexForColor(piece.getPlayerColor(), index) >= 10
-        && !piece.isKing()) {
-      piece.makeKing();
-      lobby.send(GameEvent.PIECE_PROMOTION, index);
     }
   }
 

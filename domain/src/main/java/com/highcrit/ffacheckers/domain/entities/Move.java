@@ -2,6 +2,7 @@ package com.highcrit.ffacheckers.domain.entities;
 
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,19 +20,26 @@ public class Move {
 
   private int start;
   private int end;
+  private boolean promoting;
 
-  @OneToOne private Piece takes;
+  @OneToOne(cascade = {CascadeType.ALL})
+  private Piece takes;
 
   public Move() {}
 
-  public Move(int start, int end, Piece takes) {
+  public Move(int start, int end, boolean promoting, Piece takes) {
     this.start = start;
     this.end = end;
+    this.promoting = promoting;
     this.takes = takes;
   }
 
-  public Move(int start, int end) {
-    this(start, end, null);
+  public Move(int start, int end, Piece takes) {
+    this(start, end, false, takes);
+  }
+
+  public Move(int start, int end, boolean promoting) {
+    this(start, end, promoting, null);
   }
 
   public int getStart() {
@@ -40,6 +48,14 @@ public class Move {
 
   public int getEnd() {
     return end;
+  }
+
+  public boolean isPromoting() {
+    return promoting;
+  }
+
+  public void setPromoting(boolean promoting) {
+    this.promoting = promoting;
   }
 
   public Piece getTakes() {
@@ -63,7 +79,10 @@ public class Move {
       return false;
     }
     Move move = (Move) o;
-    return start == move.start && end == move.end && Objects.equals(takes, move.takes);
+    return start == move.start
+        && end == move.end
+        && promoting == move.promoting
+        && Objects.equals(takes, move.takes);
   }
 
   @Override

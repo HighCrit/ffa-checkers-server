@@ -35,12 +35,14 @@ class MoveCalculatorTest {
                 new MoveSequence(
                     new LinkedList<>(
                         Arrays.asList(
-                            new Move(30, 47, pieces.get(1)), new Move(47, 66, pieces.get(3))))));
+                            new Move(30, 47, pieces.get(1)),
+                            new Move(47, 66, true, pieces.get(3))))));
             add(
                 new MoveSequence(
                     new LinkedList<>(
                         Arrays.asList(
-                            new Move(30, 47, pieces.get(1)), new Move(47, 64, pieces.get(2))))));
+                            new Move(30, 47, pieces.get(1)),
+                            new Move(47, 64, true, pieces.get(2))))));
           }
         };
     Board board = new Board(pieces);
@@ -61,12 +63,12 @@ class MoveCalculatorTest {
     List<Move> expectedMoves =
         new ArrayList<>() {
           {
-            add(new Move(121, 113));
-            add(new Move(121, 112));
-            add(new Move(31, 23));
-            add(new Move(31, 41));
-            add(new Move(31, 40));
-            add(new Move(31, 22));
+            add(new Move(121, 113, false));
+            add(new Move(121, 112, false));
+            add(new Move(31, 23, true));
+            add(new Move(31, 41, true));
+            add(new Move(31, 40, true));
+            add(new Move(31, 22, true));
           }
         };
     Board board = new Board(pieces);

@@ -12,7 +12,7 @@ class MoveTest {
 
   private static Stream<Arguments> moves() {
     return Stream.of(
-        Arguments.of(new Move(2, 11), "2-11"),
+        Arguments.of(new Move(2, 11, false), "2-11"),
         Arguments.of(new Move(2, 21, new Piece(PlayerColor.RED, 11)), "2x21"));
   }
 

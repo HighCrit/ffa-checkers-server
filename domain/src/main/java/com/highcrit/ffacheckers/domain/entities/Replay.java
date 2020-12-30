@@ -3,19 +3,25 @@ package com.highcrit.ffacheckers.domain.entities;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class Replay {
-  @Id private UUID id;
+  @Id
+  @Type(type = "org.hibernate.type.UUIDCharType")
+  private UUID id;
 
   @Column(length = 650)
   private String initialFen;
 
-  @OneToMany private List<Move> moves;
+  @OneToMany(cascade = {CascadeType.ALL})
+  private List<Move> moves;
 
   public Replay(UUID id, String initialFen, List<Move> moves) {
     this.id = id;
