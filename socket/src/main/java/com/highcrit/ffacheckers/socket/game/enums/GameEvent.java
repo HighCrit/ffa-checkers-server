@@ -9,7 +9,6 @@ public enum GameEvent implements Event {
   /* Outbound */
   MOVE_RESULT("game-move-result"),
   MOVE_SET("game-move-set"),
-  PIECE_PROMOTION("game-piece-promotion"),
   CURRENT_PLAYER("game-current-player"),
   YOUR_COLOR("game-your-color"),
   BOARD("game-board"),

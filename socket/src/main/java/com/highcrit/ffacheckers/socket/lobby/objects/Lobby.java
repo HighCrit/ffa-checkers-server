@@ -69,9 +69,12 @@ public class Lobby {
     if (connectedClients.size() >= Game.MAX_PLAYERS) {
       return new ActionFailed("Lobby is full");
     }
-    connectedClients.put(id, client);
-    game.addPlayer(client);
-    client.setLobby(this);
+
+    if (!connectedClients.containsKey(id)) {
+      connectedClients.put(id, client);
+      game.addPlayer(client);
+      client.setLobby(this);
+    }
 
     sendPlayers();
 
