@@ -34,6 +34,7 @@ public class LobbyManager {
   public void delete(UUID code, String reason) {
     Lobby lobby = lobbies.get(code);
     if (lobby == null) {
+      LOGGER.error(String.format("Failed to close lobby (%s) with reason: %s", code, reason));
       return;
     }
     LOGGER.info(String.format("Closing lobby (%s) with reason: %s", code, reason));

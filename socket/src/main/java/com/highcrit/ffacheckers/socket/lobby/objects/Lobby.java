@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 public class Lobby {
   private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
-  private static final int LOBBY_MAX_IDLE_TIME = 30 * 60; // 10 minutes
+  private static final int LOBBY_MAX_IDLE_TIME = 120 * 60; // 2 hours
   private static final TaskScheduler scheduler = new TaskScheduler();
 
   @Getter(AccessLevel.PACKAGE)
@@ -39,9 +39,7 @@ public class Lobby {
     this.lobbyManager = lobbyManager;
     scheduler.scheduleTask(
         () -> {
-          if (!this.game.isHasStarted()) {
-            lobbyManager.delete(code, "Inactivity");
-          }
+          lobbyManager.delete(code, "Inactivity");
         },
         LOBBY_MAX_IDLE_TIME);
   }
