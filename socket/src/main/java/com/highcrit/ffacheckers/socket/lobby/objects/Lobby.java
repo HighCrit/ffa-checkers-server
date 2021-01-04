@@ -54,7 +54,7 @@ public class Lobby {
       return;
     }
     // TODO: Send info on disconnected player
-    send(LobbyEvent.PLAYER_DISCONNECT, null);
+    send(LobbyEvent.PLAYER_DISCONNECT, info.getPlayerColor());
   }
 
   public void onPlayerReconnect(PlayerClient info) {

@@ -6,7 +6,6 @@ import java.util.UUID;
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
-import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ public class AIClient extends AbstractClient {
 
   public AIClient() {
     super(UUID.randomUUID());
-    setName("BOT");
+    setName("BOT 🤖");
   }
 
   @Override
@@ -33,17 +32,7 @@ public class AIClient extends AbstractClient {
       LOGGER.info(String.format("%s bot received event \"%s\"", playerColor, event.getEventName()));
       // Add some time so the humans can follow our movements
       SCHEDULER.scheduleTask(
-          () -> {
-            if (((List<Object>) data).get(0) instanceof MoveSequence) {
-              ((List<MoveSequence>) data)
-                  .get(0)
-                  .getSequence()
-                  .forEach(m -> getLobby().getGame().onMove(this, m));
-            } else {
-              getLobby().getGame().onMove(this, ((List<Move>) data).get(0));
-            }
-          },
-          1);
+          () -> getLobby().getGame().onMove(this, ((List<Move>) data).get(0)), 1);
     }
   }
 }

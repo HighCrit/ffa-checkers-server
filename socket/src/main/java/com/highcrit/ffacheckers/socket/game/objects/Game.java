@@ -34,7 +34,6 @@ public class Game {
   // Save the move sets so we don't have to recalculate
   private List<Move> normalMoves = Collections.emptyList();
   private List<MoveSequence> capturingMoves = Collections.emptyList();
-  private List<String> capturingMoveStrings = Collections.emptyList();
 
   private MoveSequence lastMoveSequence;
   private Board board;
@@ -100,19 +99,11 @@ public class Game {
     // If the current player doesn't exist or has left
     if (players.get(currentPlayer) == null || players.get(currentPlayer).hasLeft()) {
       // But they still have pieces on the board
-      if (board.getPieces().get(currentPlayer) != null) {
-        // Remove them and re-emit the board
-        board.removePlayer(currentPlayer);
-        lobby.send(GameEvent.BOARD, board.toFen());
-        hasGameEnded();
-      }
       startNextTurn();
       return;
     }
 
     capturingMoves = MOVE_CALCULATOR.getCapturingMoves(board, currentPlayer);
-    capturingMoveStrings =
-        capturingMoves.stream().map(MoveSequence::toString).collect(Collectors.toList());
 
     // If no jumps are possible
     if (capturingMoves.isEmpty()) {
@@ -121,7 +112,6 @@ public class Game {
       if (normalMoves.isEmpty()) {
         // Player lost, no legal moves available
         players.get(currentPlayer).setLeft(true);
-        board.removePlayer(currentPlayer);
         lobby.send(GameEvent.BOARD, board.toFen());
         hasGameEnded();
         startNextTurn();
@@ -133,7 +123,8 @@ public class Game {
       normalMoves.clear();
       lastMoveSequence = new MoveSequence();
       lobby.send(GameEvent.CURRENT_PLAYER, currentPlayer);
-      players.get(currentPlayer).send(GameEvent.MOVE_SET, capturingMoves);
+      players.get(currentPlayer).send(GameEvent.MOVE_SET,
+              capturingMoves.stream().map(ms -> ms.getSequence().get(0)).collect(Collectors.toList()));
     }
   }
 
@@ -167,6 +158,9 @@ public class Game {
             board.getGrid()[cMove.getEnd()].makeKing();
           }
           startNextTurn();
+        } else {
+          // Send next move in sequence
+          client.send(GameEvent.MOVE_SET, capturingMoves.stream().map(m -> m.getSequence().get(lastMoveSequence.length())).collect(Collectors.toList()));
         }
       } else {
         // No sequence was found
