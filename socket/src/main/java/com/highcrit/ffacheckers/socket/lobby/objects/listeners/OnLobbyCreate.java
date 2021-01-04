@@ -33,7 +33,7 @@ public class OnLobbyCreate implements DataListener<Object> {
     }
 
     Lobby lobby = this.lobbyManager.create();
-    Result result = lobby.addPlayer(info.getId(), info);
+    Result result = lobby.addPlayer(info);
     info.setHost(true);
     info.send(LobbyEvent.CREATE_RESULT, result);
   }

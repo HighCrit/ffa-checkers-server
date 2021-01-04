@@ -7,12 +7,10 @@ import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
-import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AIClient extends AbstractClient {
-  private static final TaskScheduler SCHEDULER = new TaskScheduler();
   private static final Logger LOGGER = LoggerFactory.getLogger(AIClient.class);
 
   public AIClient() {
@@ -30,9 +28,7 @@ public class AIClient extends AbstractClient {
       }
     } else if (GameEvent.MOVE_SET.equals(event)) {
       LOGGER.info(String.format("%s bot received event \"%s\"", playerColor, event.getEventName()));
-      // Add some time so the humans can follow our movements
-      SCHEDULER.scheduleTask(
-          () -> getLobby().getGame().onMove(this, ((List<Move>) data).get(0)), 1);
+      getLobby().getGame().onMove(this, ((List<Move>) data).get(0));
     }
   }
 }

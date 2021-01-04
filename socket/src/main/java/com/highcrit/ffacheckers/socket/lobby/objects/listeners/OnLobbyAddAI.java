@@ -33,7 +33,7 @@ public class OnLobbyAddAI implements DataListener<Object> {
     if (info.getLobby() != null) {
       if (info.isHost()) {
         AIClient ai = new AIClient();
-        info.getLobby().addPlayer(ai.getId(), ai);
+        info.getLobby().addPlayer(ai);
         info.send(LobbyEvent.ADD_AI_RESULT, new LobbyAddAIResult(ai.getPlayerColor()));
       } else {
         info.send(LobbyEvent.ADD_AI_RESULT, new ActionFailed("Only the host can add AIs"));

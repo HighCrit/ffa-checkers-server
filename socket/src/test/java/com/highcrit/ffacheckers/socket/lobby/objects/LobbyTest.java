@@ -20,14 +20,14 @@ class LobbyTest {
   @Test
   void addPlayer() {
     PlayerClient client = mock(PlayerClient.class);
-    lobby.addPlayer(client.getId(), client);
+    lobby.addPlayer(client);
     Assertions.assertEquals(1, lobby.getConnectedClients().size());
   }
 
   @Test
   void removePlayer() {
     PlayerClient client = mock(PlayerClient.class);
-    lobby.addPlayer(client.getId(), client);
+    lobby.addPlayer(client);
     lobby.removePlayer(client);
     Assertions.assertEquals(0, lobby.getConnectedClients().size());
   }
@@ -35,7 +35,7 @@ class LobbyTest {
   @Test
   void delete() {
     PlayerClient client = mock(PlayerClient.class);
-    lobby.addPlayer(client.getId(), client);
+    lobby.addPlayer(client);
     lobby.delete();
     Assertions.assertNull(client.getLobby());
   }

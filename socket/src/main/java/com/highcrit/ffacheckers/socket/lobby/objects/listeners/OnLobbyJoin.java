@@ -38,7 +38,7 @@ public class OnLobbyJoin implements DataListener<LobbyJoinAction> {
     Result result;
     if (lobbyManager.has(lobbyJoinAction.getCode())) {
       Lobby lobby = lobbyManager.get(lobbyJoinAction.getCode());
-      result = lobby.addPlayer(info.getId(), info);
+      result = lobby.addPlayer(info);
     } else {
       result = new ActionFailed("Invalid code - no lobby exists with code");
     }
