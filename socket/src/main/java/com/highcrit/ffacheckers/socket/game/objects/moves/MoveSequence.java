@@ -6,8 +6,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.highcrit.ffacheckers.domain.entities.Move;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+@EqualsAndHashCode
 public class MoveSequence {
   @Getter private final LinkedList<Move> sequence;
 
@@ -39,22 +41,5 @@ public class MoveSequence {
     return sequence.get(0).getStart()
         + "x"
         + sequence.stream().map(m -> String.valueOf(m.getEnd())).collect(Collectors.joining("x"));
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    MoveSequence that = (MoveSequence) o;
-    return sequence.equals(that.sequence);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(sequence);
   }
 }

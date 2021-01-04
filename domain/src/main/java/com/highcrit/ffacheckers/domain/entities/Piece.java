@@ -6,14 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Piece {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +26,7 @@ public class Piece {
   private int position;
   private boolean isKing;
 
+  @Transient
   private transient boolean isGhost = false;
 
   public Piece(PlayerColor playerColor, int position, boolean isKing) {
@@ -38,22 +42,5 @@ public class Piece {
   @Override
   public String toString() {
     return (isKing ? "K" : "") + this.position;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Piece piece = (Piece) o;
-    return position == piece.position && isKing == piece.isKing && playerColor == piece.playerColor;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(playerColor, position, isKing);
   }
 }

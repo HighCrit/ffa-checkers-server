@@ -10,11 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Move {
   private static final String FEN_CAPTURE_SYMBOL = "x";
   private static final String FEN_MOVE_SYMBOL = "-";
@@ -51,25 +53,5 @@ public class Move {
       return start + FEN_MOVE_SYMBOL + end;
     }
     return start + FEN_CAPTURE_SYMBOL + end;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Move move = (Move) o;
-    return start == move.start
-        && end == move.end
-        && promoting == move.promoting
-        && Objects.equals(takes, move.takes);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(start, end);
   }
 }
