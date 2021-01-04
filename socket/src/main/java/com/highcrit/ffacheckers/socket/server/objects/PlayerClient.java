@@ -5,14 +5,16 @@ import java.util.UUID;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PlayerClient extends AbstractClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(PlayerClient.class);
 
-  private boolean isHost = false;
-  private SocketIOClient socket;
+  @Getter @Setter private boolean isHost = false;
+  @Getter @Setter private SocketIOClient socket;
 
   public PlayerClient(UUID id, SocketIOClient socket) {
     super(id);
@@ -25,25 +27,9 @@ public class PlayerClient extends AbstractClient {
     socket.sendEvent(event.getEventName(), data);
   }
 
-  public boolean isHost() {
-    return isHost;
-  }
-
-  public void setHost(boolean host) {
-    isHost = host;
-  }
-
   @Override
   public void setPlayerColor(PlayerColor playerColor) {
     super.setPlayerColor(playerColor);
     setName(playerColor.name());
-  }
-
-  public SocketIOClient getSocket() {
-    return socket;
-  }
-
-  public void setSocket(SocketIOClient socket) {
-    this.socket = socket;
   }
 }

@@ -1,6 +1,7 @@
 package com.highcrit.ffacheckers.socket.game.enums;
 
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
+import lombok.Getter;
 
 public enum GameEvent implements Event {
   /* Inbound */
@@ -15,13 +16,9 @@ public enum GameEvent implements Event {
   STATE("game-state"),
   WON("game-won-by");
 
-  private final String eventName;
+  @Getter private final String eventName;
 
   GameEvent(String eventName) {
     this.eventName = eventName;
-  }
-
-  public String getEventName() {
-    return eventName;
   }
 }

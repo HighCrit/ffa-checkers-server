@@ -3,7 +3,6 @@ package com.highcrit.ffacheckers.socket.game.objects;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +18,7 @@ import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.utils.WebManager;
+import lombok.Getter;
 
 public class Game {
   public static final int MAX_PLAYERS = 4;
@@ -28,7 +28,9 @@ public class Game {
           + "158,159:B36,37,45,46,54,55,63,64,72,73,81,82,90,91,99,100,108,109,117,118:G2,3,4,5,6,11,12,13,14,15,"
           + "20,21,22,23,24,29,30,31,32,33:R43,44,52,53,61,62,70,71,79,80,88,89,97,98,106,107,115,116,124,125";
 
+  @Getter
   private final EnumMap<PlayerColor, AbstractClient> players = new EnumMap<>(PlayerColor.class);
+
   private final Lobby lobby;
 
   // Save the move sets so we don't have to recalculate
@@ -37,7 +39,7 @@ public class Game {
 
   private MoveSequence lastMoveSequence;
   private Board board;
-  private boolean hasStarted = false;
+  @Getter private boolean hasStarted = false;
   private PlayerColor currentPlayer = PlayerColor.RED;
   private GameState gameState = GameState.WAITING;
 
@@ -61,7 +63,7 @@ public class Game {
         .ifPresent(
             abstractPlayerClient -> {
               abstractPlayerClient.setLoaded(true);
-              abstractPlayerClient.setLeft(false);
+              abstractPlayerClient.setGone(false);
             });
     info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
     if (gameState == GameState.PLAYING) {
@@ -97,7 +99,7 @@ public class Game {
         PlayerColor.values()[(currentPlayer.ordinal() + 1) % PlayerColor.values().length];
 
     // If the current player doesn't exist or has left
-    if (players.get(currentPlayer) == null || players.get(currentPlayer).hasLeft()) {
+    if (players.get(currentPlayer) == null || players.get(currentPlayer).isGone()) {
       // But they still have pieces on the board
       startNextTurn();
       return;
@@ -111,7 +113,7 @@ public class Game {
       normalMoves = MOVE_CALCULATOR.getNormalMoves(board, currentPlayer);
       if (normalMoves.isEmpty()) {
         // Player lost, no legal moves available
-        players.get(currentPlayer).setLeft(true);
+        players.get(currentPlayer).setGone(true);
         lobby.send(GameEvent.BOARD, board.toFen());
         hasGameEnded();
         startNextTurn();
@@ -164,7 +166,7 @@ public class Game {
       if (ms.toString().equals(tempMoveSequenceString)) {
         // Only promote at end of sequence
         if (cMove.isPromoting()) {
-          board.getGrid()[cMove.getEnd()].makeKing();
+          board.getGrid()[cMove.getEnd()].setKing(true);
         }
         startNextTurn();
       } else {
@@ -192,7 +194,7 @@ public class Game {
       board.applyMove(nMove);
       lobby.send(GameEvent.MOVE_RESULT, new MoveResult(nMove));
       if (nMove.isPromoting()) {
-        board.getGrid()[nMove.getEnd()].makeKing();
+        board.getGrid()[nMove.getEnd()].setKing(true);
       }
       startNextTurn();
     }
@@ -202,7 +204,7 @@ public class Game {
     Optional<AbstractClient> oClient = players.values().stream().filter(info::equals).findFirst();
     if (oClient.isPresent()) {
       AbstractClient client = oClient.get();
-      client.setLeft(true);
+      client.setGone(true);
       players.remove(info.getPlayerColor());
 
       if (info.getPlayerColor() == currentPlayer) {
@@ -214,7 +216,7 @@ public class Game {
   public void hasGameEnded() {
     if (!hasStarted) return;
     List<AbstractClient> playingPlayers =
-        this.players.values().stream().filter(p -> !p.hasLeft()).collect(Collectors.toList());
+        this.players.values().stream().filter(p -> !p.isGone()).collect(Collectors.toList());
     if (playingPlayers.size() == 1) {
       setGameState(GameState.ENDED);
       lobby.send(GameEvent.WON, playingPlayers.get(0).getPlayerColor());
@@ -227,13 +229,5 @@ public class Game {
   private void setGameState(GameState gameState) {
     this.gameState = gameState;
     lobby.send(GameEvent.STATE, gameState);
-  }
-
-  public boolean hasStarted() {
-    return hasStarted;
-  }
-
-  public Map<PlayerColor, AbstractClient> getPlayers() {
-    return players;
   }
 }

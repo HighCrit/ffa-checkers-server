@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
-import com.highcrit.ffacheckers.socket.lobby.LobbyEvent;
+import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

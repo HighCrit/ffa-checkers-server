@@ -3,6 +3,7 @@ package com.highcrit.ffacheckers.socket.lobby;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
 import com.highcrit.ffacheckers.socket.server.SocketManager;

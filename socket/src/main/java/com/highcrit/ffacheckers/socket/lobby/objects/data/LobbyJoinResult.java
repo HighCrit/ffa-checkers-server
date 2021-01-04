@@ -3,17 +3,15 @@ package com.highcrit.ffacheckers.socket.lobby.objects.data;
 import java.util.UUID;
 
 import com.highcrit.ffacheckers.domain.communication.objects.Result;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LobbyJoinResult implements Result {
-  private final UUID code;
-
-  public LobbyJoinResult(UUID code) {
-    this.code = code;
-  }
-
-  public UUID getCode() {
-    return code;
-  }
+  private UUID code;
 
   @Override
   public boolean isSuccess() {

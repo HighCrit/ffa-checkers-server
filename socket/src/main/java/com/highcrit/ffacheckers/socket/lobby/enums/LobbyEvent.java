@@ -1,6 +1,7 @@
-package com.highcrit.ffacheckers.socket.lobby;
+package com.highcrit.ffacheckers.socket.lobby.enums;
 
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
+import lombok.Getter;
 
 public enum LobbyEvent implements Event {
   /* Inbound */
@@ -19,14 +20,9 @@ public enum LobbyEvent implements Event {
   PLAYER_DISCONNECT("lobby-player-disconnect"),
   CLOSING("lobby-closing");
 
-  private final String eventName;
+  @Getter private final String eventName;
 
   LobbyEvent(String eventName) {
     this.eventName = eventName;
-  }
-
-  @Override
-  public String getEventName() {
-    return eventName;
   }
 }

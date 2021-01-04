@@ -9,7 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@NoArgsConstructor
 public class Move {
   private static final String FEN_CAPTURE_SYMBOL = "x";
   private static final String FEN_MOVE_SYMBOL = "-";
@@ -25,8 +30,6 @@ public class Move {
   @OneToOne(cascade = {CascadeType.ALL})
   private Piece takes;
 
-  public Move() {}
-
   public Move(int start, int end, boolean promoting, Piece takes) {
     this.start = start;
     this.end = end;
@@ -40,26 +43,6 @@ public class Move {
 
   public Move(int start, int end, boolean promoting) {
     this(start, end, promoting, null);
-  }
-
-  public int getStart() {
-    return start;
-  }
-
-  public int getEnd() {
-    return end;
-  }
-
-  public boolean isPromoting() {
-    return promoting;
-  }
-
-  public void setPromoting(boolean promoting) {
-    this.promoting = promoting;
-  }
-
-  public Piece getTakes() {
-    return takes;
   }
 
   @Override

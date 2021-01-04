@@ -1,15 +1,11 @@
 package com.highcrit.ffacheckers.domain.communication.objects;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
 public class ActionFailed implements Result {
-  private final String message;
-
-  public ActionFailed(String message) {
-    this.message = message;
-  }
-
-  public String getMessage() {
-    return message;
-  }
+  @Getter private final String message;
 
   @Override
   public boolean isSuccess() {

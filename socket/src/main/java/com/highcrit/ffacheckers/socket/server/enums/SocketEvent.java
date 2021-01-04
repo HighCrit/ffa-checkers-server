@@ -1,6 +1,7 @@
 package com.highcrit.ffacheckers.socket.server.enums;
 
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
+import lombok.Getter;
 
 public enum SocketEvent implements Event {
   /* Inbound */
@@ -10,14 +11,9 @@ public enum SocketEvent implements Event {
   /* Outbound */
   SEND_UUID("send-uuid");
 
-  private final String eventName;
+  @Getter private final String eventName;
 
   SocketEvent(String eventName) {
     this.eventName = eventName;
-  }
-
-  @Override
-  public String getEventName() {
-    return eventName;
   }
 }

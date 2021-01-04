@@ -8,8 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Piece {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,8 +25,6 @@ public class Piece {
 
   private transient boolean isGhost = false;
 
-  public Piece() {}
-
   public Piece(PlayerColor playerColor, int position, boolean isKing) {
     this.playerColor = playerColor;
     this.position = position;
@@ -31,34 +33,6 @@ public class Piece {
 
   public Piece(PlayerColor playerColor, int position) {
     this(playerColor, position, false);
-  }
-
-  public int getPosition() {
-    return position;
-  }
-
-  public void setPosition(int position) {
-    this.position = position;
-  }
-
-  public void makeKing() {
-    this.isKing = true;
-  }
-
-  public boolean isKing() {
-    return isKing;
-  }
-
-  public boolean isGhost() {
-    return isGhost;
-  }
-
-  public void setGhost(boolean ghost) {
-    isGhost = ghost;
-  }
-
-  public PlayerColor getPlayerColor() {
-    return playerColor;
   }
 
   @Override

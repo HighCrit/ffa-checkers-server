@@ -6,9 +6,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.highcrit.ffacheckers.domain.entities.Move;
+import lombok.Getter;
 
 public class MoveSequence {
-  private final LinkedList<Move> sequence;
+  @Getter private final LinkedList<Move> sequence;
 
   public MoveSequence(List<Move> sequence) {
     this.sequence = new LinkedList<>(sequence);
@@ -18,16 +19,12 @@ public class MoveSequence {
     this.sequence = new LinkedList<>();
   }
 
-  public List<Move> getSequence() {
-    return sequence;
+  public void addMove(Move move) {
+    this.sequence.add(move);
   }
 
-  public boolean addMove(Move move) {
-    return this.sequence.add(move);
-  }
-
-  public Move undoMove() {
-    return this.sequence.removeLast();
+  public void undoMove() {
+    this.sequence.removeLast();
   }
 
   public int length() {
