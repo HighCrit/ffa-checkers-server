@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.domain.entities.Piece;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
+import lombok.Getter;
 
 public class Board {
   public static final int BLACK_SQUARES = 162;
@@ -22,10 +23,10 @@ public class Board {
   private static final String FEN_DELIMITER = ":";
   private static final String FEN_PIECE_DELIMITER = ",";
 
-  private final Piece[] grid = new Piece[BLACK_SQUARES];
-  private final EnumMap<PlayerColor, List<Piece>> pieces = new EnumMap<>(PlayerColor.class);
-  private final LinkedList<Move> moveHistory = new LinkedList<>();
-  private final String initialFen;
+  @Getter private final Piece[] grid = new Piece[BLACK_SQUARES];
+  @Getter private final EnumMap<PlayerColor, List<Piece>> pieces = new EnumMap<>(PlayerColor.class);
+  @Getter private final LinkedList<Move> moveHistory = new LinkedList<>();
+  @Getter private final String initialFen;
 
   public Board(List<Piece> pieces) {
     placePieces(pieces);
@@ -105,21 +106,5 @@ public class Board {
         });
 
     return sb.substring(0, sb.length() - 1);
-  }
-
-  public Piece[] getGrid() {
-    return grid;
-  }
-
-  public Map<PlayerColor, List<Piece>> getPieces() {
-    return pieces;
-  }
-
-  public List<Move> getMoveHistory() {
-    return moveHistory;
-  }
-
-  public String getInitialFen() {
-    return initialFen;
   }
 }
