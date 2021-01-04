@@ -7,6 +7,8 @@ import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,8 @@ public class LobbyManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(LobbyManager.class);
 
   private final SocketManager socketManager;
+
+  @Getter(AccessLevel.PACKAGE)
   private final HashMap<UUID, Lobby> lobbies = new HashMap<>();
 
   public LobbyManager(SocketManager socketManager) {
@@ -32,7 +36,7 @@ public class LobbyManager {
     if (lobby == null) {
       return;
     }
-    LOGGER.info(String.format("Closing lobby {%s) with reason: %s", code, reason));
+    LOGGER.info(String.format("Closing lobby (%s) with reason: %s", code, reason));
     lobby.send(LobbyEvent.CLOSING, new LobbyClosing(reason));
     lobby.delete();
     socketManager.clearRoom(code);

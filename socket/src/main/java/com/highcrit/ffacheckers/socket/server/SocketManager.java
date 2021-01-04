@@ -28,13 +28,17 @@ import com.highcrit.ffacheckers.socket.server.objects.listeners.OnConnection;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnDisconnection;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnResetUUID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnUUID;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SocketManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(SocketManager.class);
 
+  @Getter(AccessLevel.PACKAGE)
   private final HashMap<UUID, PlayerClient> sockets = new HashMap<>();
+
   private final LobbyManager lobbyManager;
   private final SocketIOServer server;
 

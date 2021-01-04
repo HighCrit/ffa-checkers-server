@@ -18,6 +18,7 @@ import com.highcrit.ffacheckers.socket.server.objects.AIClient;
 import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,9 @@ public class Lobby {
   private static final int LOBBY_MAX_IDLE_TIME = 30 * 60; // 10 minutes
   private static final TaskScheduler scheduler = new TaskScheduler();
 
+  @Getter(AccessLevel.PACKAGE)
   private final HashMap<UUID, AbstractClient> connectedClients = new HashMap<>();
+
   @Getter private final LobbyManager lobbyManager;
   @Getter private final Game game = new Game(this);
   @Getter private final UUID code = UUID.randomUUID();

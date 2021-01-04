@@ -20,7 +20,8 @@ public class RankCalculator {
         return col + 1;
       case GREEN:
         return row + 1;
+      default:
+        throw new IllegalArgumentException("Invalid color");
     }
-    throw new IllegalArgumentException("Invalid color");
   }
 }

@@ -10,12 +10,11 @@ import lombok.Data;
 
 @Data
 public abstract class AbstractClient {
-  private ConnectionState state = ConnectionState.CONNECTED;
-  private Lobby lobby;
-
   protected final UUID id;
   protected String name;
   protected PlayerColor playerColor;
+  private ConnectionState state = ConnectionState.CONNECTED;
+  private Lobby lobby;
   private boolean loaded;
   private boolean gone;
 

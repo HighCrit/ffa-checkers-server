@@ -1,7 +1,5 @@
 package com.highcrit.ffacheckers.domain.entities;
 
-import java.util.Objects;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,8 +24,7 @@ public class Piece {
   private int position;
   private boolean isKing;
 
-  @Transient
-  private transient boolean isGhost = false;
+  @Transient private transient boolean isGhost = false;
 
   public Piece(PlayerColor playerColor, int position, boolean isKing) {
     this.playerColor = playerColor;
@@ -37,6 +34,10 @@ public class Piece {
 
   public Piece(PlayerColor playerColor, int position) {
     this(playerColor, position, false);
+  }
+
+  public Piece copyOf() {
+    return new Piece(playerColor, position, isKing);
   }
 
   @Override

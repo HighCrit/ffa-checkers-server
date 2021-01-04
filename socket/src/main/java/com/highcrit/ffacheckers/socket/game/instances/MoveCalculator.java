@@ -74,7 +74,8 @@ public class MoveCalculator {
             && board.getGrid()[positionAfterJump] == null) { // if can jump to valid spot
           // Move from start to position after jump is a valid move
           jumpFound = true;
-          Move move = new Move(piece.getPosition(), positionAfterJump, pieceAtPositionInDirection);
+          Move move =
+              new Move(piece.getPosition(), positionAfterJump, pieceAtPositionInDirection.copyOf());
           pastMoves.add(move);
           board.applyMove(move);
           getMoveSequenceOfPiece(board, piece, pastMoves, moveSequences);
