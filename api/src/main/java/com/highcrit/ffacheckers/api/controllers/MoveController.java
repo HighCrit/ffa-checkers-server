@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-public class ReplayController {
-  protected final ReplayRepository replayRepository;
+public class MoveController {
+    protected final ReplayRepository replayRepository;
 }

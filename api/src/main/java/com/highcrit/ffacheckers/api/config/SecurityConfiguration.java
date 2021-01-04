@@ -24,7 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .disable()
         .authorizeRequests()
         // All GET requests are okay
-        .antMatchers(HttpMethod.GET, replayAntPattern)
+        .antMatchers(HttpMethod.GET, replayAntPattern, "/moves/**")
         .permitAll()
         // For any non-get request to replay you'll need to have the ip resolved from 'socket'
         .antMatchers(HttpMethod.POST, replayAntPattern)
