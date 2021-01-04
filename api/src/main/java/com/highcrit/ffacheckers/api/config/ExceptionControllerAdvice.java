@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice {
-    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public void malformedUUID() {
-        // Spring handles response
-    }
+  @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+  @ExceptionHandler(IllegalArgumentException.class)
+  public void malformedUUID() {
+    // Spring handles response
+  }
 }

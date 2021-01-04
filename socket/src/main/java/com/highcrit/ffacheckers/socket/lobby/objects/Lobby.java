@@ -53,7 +53,6 @@ public class Lobby {
       LOGGER.error("Tried to handle player disconnect that wasn't in this lobby");
       return;
     }
-    // TODO: Send info on disconnected player
     send(LobbyEvent.PLAYER_DISCONNECT, info.getPlayerColor());
   }
 

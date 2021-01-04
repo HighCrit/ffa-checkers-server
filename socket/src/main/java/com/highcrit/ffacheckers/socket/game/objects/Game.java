@@ -123,8 +123,13 @@ public class Game {
       normalMoves.clear();
       lastMoveSequence = new MoveSequence();
       lobby.send(GameEvent.CURRENT_PLAYER, currentPlayer);
-      players.get(currentPlayer).send(GameEvent.MOVE_SET,
-              capturingMoves.stream().map(ms -> ms.getSequence().get(0)).collect(Collectors.toList()));
+      players
+          .get(currentPlayer)
+          .send(
+              GameEvent.MOVE_SET,
+              capturingMoves.stream()
+                  .map(ms -> ms.getSequence().get(0))
+                  .collect(Collectors.toList()));
     }
   }
 
@@ -146,25 +151,29 @@ public class Game {
               .findFirst()
               .orElse(null);
       // If sequence is valid
-      if (ms != null) {
-        // Get current move to execute
-        Move cMove = ms.getSequence().get(lastMoveSequence.length() - 1);
-        board.applyMove(cMove);
-        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(cMove));
-        // Check is sequence has been completed
-        if (ms.toString().equals(tempMoveSequenceString)) {
-          // Only promote at end of sequence
-          if (cMove.isPromoting()) {
-            board.getGrid()[cMove.getEnd()].makeKing();
-          }
-          startNextTurn();
-        } else {
-          // Send next move in sequence
-          client.send(GameEvent.MOVE_SET, capturingMoves.stream().map(m -> m.getSequence().get(lastMoveSequence.length())).collect(Collectors.toList()));
-        }
-      } else {
+      if (ms == null) {
         // No sequence was found
         lastMoveSequence.undoMove();
+        return;
+      }
+      // Get current move to execute
+      Move cMove = ms.getSequence().get(lastMoveSequence.length() - 1);
+      board.applyMove(cMove);
+      lobby.send(GameEvent.MOVE_RESULT, new MoveResult(cMove));
+      // Check is sequence has been completed
+      if (ms.toString().equals(tempMoveSequenceString)) {
+        // Only promote at end of sequence
+        if (cMove.isPromoting()) {
+          board.getGrid()[cMove.getEnd()].makeKing();
+        }
+        startNextTurn();
+      } else {
+        // Send next move in sequence
+        client.send(
+            GameEvent.MOVE_SET,
+            capturingMoves.stream()
+                .map(m -> m.getSequence().get(lastMoveSequence.length()))
+                .collect(Collectors.toList()));
       }
     } else {
       // Normal moves
@@ -175,17 +184,17 @@ public class Game {
               .findFirst()
               .orElse(null);
       // Check if move was found
-      if (nMove != null) {
-        board.applyMove(nMove);
-        lobby.send(GameEvent.MOVE_RESULT, new MoveResult(nMove));
-        if (nMove.isPromoting()) {
-          board.getGrid()[nMove.getEnd()].makeKing();
-        }
-        startNextTurn();
-      } else {
+      if (nMove == null) {
         // No valid moves were found for given move information
         client.send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
+        return;
       }
+      board.applyMove(nMove);
+      lobby.send(GameEvent.MOVE_RESULT, new MoveResult(nMove));
+      if (nMove.isPromoting()) {
+        board.getGrid()[nMove.getEnd()].makeKing();
+      }
+      startNextTurn();
     }
   }
 

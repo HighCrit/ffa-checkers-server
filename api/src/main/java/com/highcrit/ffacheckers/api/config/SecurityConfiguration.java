@@ -12,20 +12,24 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   private final String socketIp = InetAddress.getByName("socket").getHostAddress();
 
-  public SecurityConfiguration() throws UnknownHostException {}
+  public SecurityConfiguration() throws UnknownHostException {
+    // Empty constructor because the initialization of socketIp might throw something
+  }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    String replayAntPattern = "/replays/**";
+
     http.csrf()
         .disable()
         .authorizeRequests()
         // All GET requests are okay
-        .antMatchers(HttpMethod.GET, "/replays/**")
+        .antMatchers(HttpMethod.GET, replayAntPattern)
         .permitAll()
         // For any non-get request to replay you'll need to have the ip resolved from 'socket'
-        .antMatchers(HttpMethod.POST, "/replays/**")
+        .antMatchers(HttpMethod.POST, replayAntPattern)
         .hasIpAddress(socketIp)
-        .antMatchers(HttpMethod.DELETE, "/replays/**")
+        .antMatchers(HttpMethod.DELETE, replayAntPattern)
         .hasIpAddress(socketIp)
         // We'll permit routes on a route by route basis
         .anyRequest()

@@ -5,7 +5,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
 import com.highcrit.ffacheckers.socket.server.enums.SocketEvent;
-import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
+import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 
 public class OnResetUUID implements DataListener<UID> {
@@ -17,12 +17,12 @@ public class OnResetUUID implements DataListener<UID> {
 
   @Override
   public void onData(SocketIOClient socketIOClient, UID uid, AckRequest ackRequest) {
-    AbstractClient info = socketManager.getById(uid.getId());
+    PlayerClient info = socketManager.getById(uid.getId());
     if (info == null) {
       return;
     }
     if (info.getLobby() != null) {
-      // TODO: Remove player from lobby
+      info.getLobby().removePlayer(info);
     }
 
     this.socketManager.remove(info.getId());

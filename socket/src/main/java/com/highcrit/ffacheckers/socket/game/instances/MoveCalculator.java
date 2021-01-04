@@ -62,24 +62,24 @@ public class MoveCalculator {
       if (positionInDirection != -1) { // If position is valid
         Piece pieceAtPositionInDirection = board.getGrid()[positionInDirection];
 
-        if (pieceAtPositionInDirection != null // If there is hittable piece
-            && !pieceAtPositionInDirection.isGhost()
-            && pieceAtPositionInDirection.getPlayerColor() != piece.getPlayerColor()) {
-          // Check if place after piece is available to jump to
-          int positionAfterJump = direction.getIndexInDirectionFrom(positionInDirection);
+        if (pieceAtPositionInDirection == null // If there is hittable piece
+            || pieceAtPositionInDirection.isGhost()
+            || pieceAtPositionInDirection.getPlayerColor() == piece.getPlayerColor()) {
+          continue;
+        }
+        // Check if place after piece is available to jump to
+        int positionAfterJump = direction.getIndexInDirectionFrom(positionInDirection);
 
-          if (positionAfterJump != -1
-              && board.getGrid()[positionAfterJump] == null) { // if can jump to valid spot
-            // Move from start to position after jump is a valid move
-            jumpFound = true;
-            Move move =
-                new Move(piece.getPosition(), positionAfterJump, pieceAtPositionInDirection);
-            pastMoves.add(move);
-            board.applyMove(move);
-            getMoveSequenceOfPiece(board, piece, pastMoves, moveSequences);
-            board.undoMove();
-            pastMoves.removeLast();
-          }
+        if (positionAfterJump != -1
+            && board.getGrid()[positionAfterJump] == null) { // if can jump to valid spot
+          // Move from start to position after jump is a valid move
+          jumpFound = true;
+          Move move = new Move(piece.getPosition(), positionAfterJump, pieceAtPositionInDirection);
+          pastMoves.add(move);
+          board.applyMove(move);
+          getMoveSequenceOfPiece(board, piece, pastMoves, moveSequences);
+          board.undoMove();
+          pastMoves.removeLast();
         }
       }
     }
