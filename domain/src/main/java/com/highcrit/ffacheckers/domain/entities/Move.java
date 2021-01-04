@@ -1,7 +1,5 @@
 package com.highcrit.ffacheckers.domain.entities;
 
-import java.util.Objects;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
