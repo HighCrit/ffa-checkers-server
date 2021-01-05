@@ -9,18 +9,16 @@ import java.util.UUID;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highcrit.ffacheckers.domain.entities.Replay;
+import lombok.experimental.UtilityClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@UtilityClass
 public class WebManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(WebManager.class);
   private static final String REPLAY_URL = "http://api:8080/api/replays/";
 
-  private WebManager() {
-    throw new IllegalStateException("Utility class");
-  }
-
-  public static void saveReplay(Replay replay) {
+  public void saveReplay(Replay replay) {
     try {
       ObjectMapper objectMapper = new ObjectMapper();
       String requestBody = objectMapper.writeValueAsString(replay);
@@ -53,7 +51,7 @@ public class WebManager {
     }
   }
 
-  public static void deleteReplay(UUID id) {
+  public void deleteReplay(UUID id) {
     LOGGER.info(String.format("Deleting replays with id: %s", id));
     HttpClient client = HttpClient.newHttpClient();
     HttpRequest request =

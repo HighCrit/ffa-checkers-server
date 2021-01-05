@@ -1,14 +1,11 @@
 package com.highcrit.ffacheckers.socket.utils;
 
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class RankCalculator {
-
-  private RankCalculator() {
-    throw new IllegalStateException("Utility class");
-  }
-
-  public static int getRankFromIndexForColor(PlayerColor color, int index) {
+  public int getRankFromIndexForColor(PlayerColor color, int index) {
     int row = index / 9;
     int col = (index % 9) * 2 + (row % 2);
     switch (color) {
