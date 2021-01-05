@@ -44,7 +44,6 @@ public class WebManager {
                   LOGGER.info(message);
                 } else {
                   LOGGER.error(message);
-                  LOGGER.error(response.body());
                 }
                 return response;
               });
