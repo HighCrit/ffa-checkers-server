@@ -51,4 +51,12 @@ class SocketManagerTest {
     UID uid = socketManager.registerClient(ioClient, null);
     Assertions.assertTrue(socketManager.getSockets().containsKey(uid.getId()));
   }
+
+  @Test
+  void registerKnownClient() {
+    SocketIOClient ioClient = mock(SocketIOClient.class);
+    UID uid = socketManager.registerClient(ioClient, null);
+    UID reconnectedUid = socketManager.registerClient(ioClient, uid.getId());
+    Assertions.assertEquals(uid, reconnectedUid);
+  }
 }

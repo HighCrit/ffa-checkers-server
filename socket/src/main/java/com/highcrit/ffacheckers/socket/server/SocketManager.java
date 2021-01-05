@@ -39,7 +39,8 @@ public class SocketManager {
   @Getter(AccessLevel.PACKAGE)
   private final HashMap<UUID, PlayerClient> sockets = new HashMap<>();
 
-  private final LobbyManager lobbyManager;
+  @Getter private final LobbyManager lobbyManager;
+
   private final SocketIOServer server;
 
   public SocketManager() {

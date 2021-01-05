@@ -21,8 +21,7 @@ public class OnLobbyAddAI implements DataListener<Object> {
   }
 
   @Override
-  public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest)
-      throws Exception {
+  public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) {
     PlayerClient info = socketManager.getInfoByClient(socketIOClient);
     if (info == null) {
       LOGGER.error("Tried to handle event of socket that has not been registered");
