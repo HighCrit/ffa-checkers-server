@@ -37,11 +37,7 @@ public class Lobby {
 
   public Lobby(LobbyManager lobbyManager) {
     this.lobbyManager = lobbyManager;
-    scheduler.scheduleTask(
-        () -> {
-          lobbyManager.delete(code, "Inactivity");
-        },
-        LOBBY_MAX_IDLE_TIME);
+    scheduler.scheduleTask(() -> lobbyManager.delete(code, "Inactivity"), LOBBY_MAX_IDLE_TIME);
   }
 
   public void onPlayerLoaded(AbstractClient info) {
