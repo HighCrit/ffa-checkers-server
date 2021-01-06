@@ -84,6 +84,7 @@ public class Game {
   }
 
   public void addPlayer(AbstractClient playerClient) {
+    if (hasStarted) return;
     for (PlayerColor playerColor : PlayerColor.values()) {
       if (players.get(playerColor) == null) {
         players.put(playerColor, playerClient);
