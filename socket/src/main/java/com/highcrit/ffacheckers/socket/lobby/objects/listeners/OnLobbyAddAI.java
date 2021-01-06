@@ -9,16 +9,14 @@ import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyAddAIResult;
 import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.clients.AIClient;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@RequiredArgsConstructor
 public class OnLobbyAddAI implements DataListener<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnLobbyAddAI.class);
   private final ISocketManager socketManager;
-
-  public OnLobbyAddAI(ISocketManager socketManager) {
-    this.socketManager = socketManager;
-  }
 
   @Override
   public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) {

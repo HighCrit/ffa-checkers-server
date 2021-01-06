@@ -6,17 +6,15 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@RequiredArgsConstructor
 public class OnMove implements DataListener<Move> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnMove.class);
 
   private final ISocketManager socketManager;
-
-  public OnMove(ISocketManager socketManager) {
-    this.socketManager = socketManager;
-  }
 
   @Override
   public void onData(SocketIOClient socketIOClient, Move move, AckRequest ackRequest) {

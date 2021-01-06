@@ -5,17 +5,15 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@RequiredArgsConstructor
 public class OnLobbyLeave implements DataListener<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnLobbyLeave.class);
 
   private final ISocketManager socketManager;
-
-  public OnLobbyLeave(ISocketManager socketManager) {
-    this.socketManager = socketManager;
-  }
 
   @Override
   public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) {
