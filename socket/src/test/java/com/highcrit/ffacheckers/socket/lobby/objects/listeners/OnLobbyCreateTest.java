@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
 import com.highcrit.ffacheckers.socket.server.ISocketManager;
@@ -21,7 +22,7 @@ class OnLobbyCreateTest {
   @BeforeEach
   void setup() {
     socketManager = new SocketManager();
-    listener = new OnLobbyCreate(socketManager.getLobbyManager(), socketManager);
+    listener = new OnLobbyCreate(new LobbyManager(socketManager), socketManager);
     socket = mock(SocketIOClient.class);
     socketManager.registerClient(socket, null);
     client = socketManager.getInfoByClient(socket);

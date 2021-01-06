@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 
 import com.corundumstudio.socketio.SocketIOClient;
 import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 class OnLobbyJoinTest {
   private ISocketManager socketManager;
+  private LobbyManager lobbyManager;
   private OnLobbyJoin listener;
   private SocketIOClient socket;
   private PlayerClient client;
@@ -24,7 +26,8 @@ class OnLobbyJoinTest {
   @BeforeEach
   void setup() {
     socketManager = new SocketManager();
-    listener = new OnLobbyJoin(socketManager.getLobbyManager(), socketManager);
+    lobbyManager = new LobbyManager(socketManager);
+    listener = new OnLobbyJoin(lobbyManager, socketManager);
     socket = mock(SocketIOClient.class);
     socketManager.registerClient(socket, null);
     client = socketManager.getInfoByClient(socket);
@@ -32,7 +35,7 @@ class OnLobbyJoinTest {
 
   @Test
   void onData() {
-    Lobby lobby = socketManager.getLobbyManager().create();
+    Lobby lobby = lobbyManager.create();
     listener.onData(socket, new LobbyJoinAction(lobby.getCode()), null);
     verify(socket)
         .sendEvent(

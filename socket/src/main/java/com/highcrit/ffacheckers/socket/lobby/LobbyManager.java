@@ -6,6 +6,12 @@ import java.util.UUID;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
+import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyAddAI;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyCreate;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyJoin;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLeave;
+import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLoaded;
 import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,6 +30,16 @@ public class LobbyManager {
     this.socketManager = socketManager;
   }
 
+  public void initialize() {
+    socketManager.addEventListener(
+        LobbyEvent.CREATE_ACTION, null, new OnLobbyCreate(this, socketManager));
+    socketManager.addEventListener(
+        LobbyEvent.JOIN_ACTION, LobbyJoinAction.class, new OnLobbyJoin(this, socketManager));
+    socketManager.addEventListener(LobbyEvent.LEAVE, null, new OnLobbyLeave(socketManager));
+    socketManager.addEventListener(LobbyEvent.ADD_AI_ACTION, null, new OnLobbyAddAI(socketManager));
+    socketManager.addEventListener(LobbyEvent.LOADED, null, new OnLobbyLoaded(socketManager));
+  }
+
   public Lobby create() {
     final Lobby lobby = new Lobby(this);
     this.lobbies.put(lobby.getCode(), lobby);
@@ -40,7 +56,6 @@ public class LobbyManager {
     LOGGER.info(String.format("Closing lobby (%s) with reason: %s", code, reason));
     lobby.send(LobbyEvent.CLOSING, new LobbyClosing(reason));
     lobby.delete();
-    socketManager.clearRoom(code);
     lobbies.remove(code);
   }
 

@@ -3,7 +3,6 @@ package com.highcrit.ffacheckers.socket.server;
 import java.util.HashMap;
 import java.util.UUID;
 
-import com.corundumstudio.socketio.BroadcastOperations;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -12,14 +11,6 @@ import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
 import com.highcrit.ffacheckers.socket.game.objects.listeners.OnMove;
-import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
-import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
-import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
-import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyAddAI;
-import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyCreate;
-import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyJoin;
-import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLeave;
-import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLoaded;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
 import com.highcrit.ffacheckers.socket.server.enums.SocketEvent;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
@@ -39,8 +30,6 @@ public class SocketManager implements ISocketManager {
   @Getter(AccessLevel.PACKAGE)
   private final HashMap<UUID, PlayerClient> sockets = new HashMap<>();
 
-  @Getter private final LobbyManager lobbyManager;
-
   private final SocketIOServer server;
 
   public SocketManager() {
@@ -48,7 +37,6 @@ public class SocketManager implements ISocketManager {
     config.setContext("/sockets");
     config.setPort(6001);
 
-    lobbyManager = new LobbyManager(this);
     server = new SocketIOServer(config);
   }
 
@@ -62,14 +50,10 @@ public class SocketManager implements ISocketManager {
   private void registerEventListeners() {
     server.addConnectListener(new OnConnection());
     server.addDisconnectListener(new OnDisconnection(this));
+
     addEventListener(SocketEvent.UUID, UID.class, new OnUUID(this));
     addEventListener(SocketEvent.RESET_UUID, UID.class, new OnResetUUID(this));
-    addEventListener(LobbyEvent.CREATE_ACTION, null, new OnLobbyCreate(lobbyManager, this));
-    addEventListener(
-        LobbyEvent.JOIN_ACTION, LobbyJoinAction.class, new OnLobbyJoin(lobbyManager, this));
-    addEventListener(LobbyEvent.LEAVE, null, new OnLobbyLeave(this));
-    addEventListener(LobbyEvent.ADD_AI_ACTION, null, new OnLobbyAddAI(this));
-    addEventListener(LobbyEvent.LOADED, null, new OnLobbyLoaded(this));
+
     addEventListener(GameEvent.MOVE_ACTION, Move.class, new OnMove(this));
   }
 
@@ -85,20 +69,6 @@ public class SocketManager implements ISocketManager {
   public void remove(UUID id) {
     LOGGER.info(String.format("Removing socket with id: %s", id));
     sockets.remove(id);
-  }
-
-  public void joinRoom(UUID id, UUID room) {
-    if (!has(id)) {
-      return;
-    }
-    LOGGER.info(String.format("Moving socket with id: %s to lobby: %s", id, room));
-    sockets.get(id).getSocket().joinRoom(room.toString());
-  }
-
-  public void clearRoom(UUID code) {
-    LOGGER.info(String.format("Removing sockets from lobby: %s", code));
-    BroadcastOperations room = server.getRoomOperations(code.toString());
-    if (room != null) room.disconnect();
   }
 
   public PlayerClient getInfoByClient(SocketIOClient socketIOClient) {
@@ -126,7 +96,6 @@ public class SocketManager implements ISocketManager {
 
       if (info.getLobby() != null) {
         // Reconnect
-        joinRoom(info.getId(), info.getLobby().getCode());
         info.getLobby().onPlayerReconnect(info);
       }
     } else {

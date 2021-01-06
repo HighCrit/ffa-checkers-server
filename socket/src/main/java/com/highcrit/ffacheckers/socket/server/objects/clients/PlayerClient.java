@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
+import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 public class PlayerClient extends AbstractClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(PlayerClient.class);
 
+  @Getter @Setter private ConnectionState state = ConnectionState.CONNECTED;
   @Getter @Setter private boolean isHost = false;
   @Getter @Setter private SocketIOClient socket;
 

@@ -19,8 +19,7 @@ public class OnMove implements DataListener<Move> {
   }
 
   @Override
-  public void onData(SocketIOClient socketIOClient, Move move, AckRequest ackRequest)
-      throws Exception {
+  public void onData(SocketIOClient socketIOClient, Move move, AckRequest ackRequest) {
     PlayerClient client = socketManager.getInfoByClient(socketIOClient);
     if (client == null) {
       LOGGER.error("Tried to handle event of socket that has not been registered");

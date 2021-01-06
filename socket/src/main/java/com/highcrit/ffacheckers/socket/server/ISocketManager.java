@@ -3,16 +3,13 @@ package com.highcrit.ffacheckers.socket.server;
 import java.util.UUID;
 
 import com.corundumstudio.socketio.SocketIOClient;
-import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
+import com.corundumstudio.socketio.listener.DataListener;
+import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 
 public interface ISocketManager {
-  LobbyManager getLobbyManager();
-
-  void joinRoom(UUID id, UUID room);
-
-  void clearRoom(UUID code);
+  <T> void addEventListener(Event event, Class<T> dto, DataListener<T> listener);
 
   PlayerClient getInfoByClient(SocketIOClient socketIOClient);
 

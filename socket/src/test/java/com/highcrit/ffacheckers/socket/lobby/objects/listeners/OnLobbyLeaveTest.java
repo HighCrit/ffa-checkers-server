@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 class OnLobbyLeaveTest {
 
   private ISocketManager socketManager;
+  private LobbyManager lobbyManager;
   private OnLobbyLeave listener;
   private SocketIOClient socket;
   private PlayerClient client;
@@ -22,6 +24,7 @@ class OnLobbyLeaveTest {
   @BeforeEach
   void setup() {
     socketManager = new SocketManager();
+    lobbyManager = new LobbyManager(socketManager);
     listener = new OnLobbyLeave(socketManager);
     socket = mock(SocketIOClient.class);
     socketManager.registerClient(socket, null);
@@ -30,7 +33,7 @@ class OnLobbyLeaveTest {
 
   @Test
   void onData() {
-    Lobby lobby = socketManager.getLobbyManager().create();
+    Lobby lobby = lobbyManager.create();
     lobby.addPlayer(client);
     listener.onData(socket, null, null);
     Assertions.assertNull(client.getLobby());

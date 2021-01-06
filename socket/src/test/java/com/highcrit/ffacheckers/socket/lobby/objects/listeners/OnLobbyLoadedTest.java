@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
+import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 class OnLobbyLoadedTest {
   private ISocketManager socketManager;
+  private LobbyManager lobbyManager;
   private OnLobbyLoaded listener;
   private SocketIOClient socket;
   private PlayerClient client;
@@ -24,6 +26,7 @@ class OnLobbyLoadedTest {
   @BeforeEach
   void setup() {
     socketManager = new SocketManager();
+    lobbyManager = new LobbyManager(socketManager);
     listener = new OnLobbyLoaded(socketManager);
     socket = mock(SocketIOClient.class);
     socketManager.registerClient(socket, null);
@@ -32,7 +35,7 @@ class OnLobbyLoadedTest {
 
   @Test
   void onData() {
-    Lobby lobby = socketManager.getLobbyManager().create();
+    Lobby lobby = lobbyManager.create();
     lobby.addPlayer(client);
 
     listener.onData(socket, null, null);
