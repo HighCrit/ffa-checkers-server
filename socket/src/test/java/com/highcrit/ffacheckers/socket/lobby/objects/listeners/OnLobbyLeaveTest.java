@@ -4,19 +4,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.corundumstudio.socketio.SocketIOClient;
-import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
-import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
-import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class OnLobbyLeaveTest {
 
-  private SocketManager socketManager;
+  private ISocketManager socketManager;
   private OnLobbyLeave listener;
   private SocketIOClient socket;
   private PlayerClient client;

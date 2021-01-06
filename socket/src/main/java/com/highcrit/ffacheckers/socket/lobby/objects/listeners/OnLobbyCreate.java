@@ -7,8 +7,8 @@ import com.highcrit.ffacheckers.domain.communication.objects.Result;
 import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
-import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,9 +16,9 @@ public class OnLobbyCreate implements DataListener<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnLobbyCreate.class);
 
   private final LobbyManager lobbyManager;
-  private final SocketManager socketManager;
+  private final ISocketManager socketManager;
 
-  public OnLobbyCreate(LobbyManager lobbyManager, SocketManager socketManager) {
+  public OnLobbyCreate(LobbyManager lobbyManager, ISocketManager socketManager) {
     this.lobbyManager = lobbyManager;
     this.socketManager = socketManager;
   }

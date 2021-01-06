@@ -5,7 +5,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
 import com.highcrit.ffacheckers.socket.server.enums.SocketEvent;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 
 public class OnResetUUID implements DataListener<UID> {

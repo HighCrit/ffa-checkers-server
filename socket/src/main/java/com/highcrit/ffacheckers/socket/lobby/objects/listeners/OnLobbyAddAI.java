@@ -6,17 +6,17 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyAddAIResult;
-import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.AIClient;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
+import com.highcrit.ffacheckers.socket.server.objects.clients.AIClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OnLobbyAddAI implements DataListener<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnLobbyAddAI.class);
-  private final SocketManager socketManager;
+  private final ISocketManager socketManager;
 
-  public OnLobbyAddAI(SocketManager socketManager) {
+  public OnLobbyAddAI(ISocketManager socketManager) {
     this.socketManager = socketManager;
   }
 

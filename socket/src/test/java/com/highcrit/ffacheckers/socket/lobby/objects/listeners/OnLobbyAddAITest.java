@@ -10,13 +10,14 @@ import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyAddAIResult;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class OnLobbyAddAITest {
-  private SocketManager socketManager;
+  private ISocketManager socketManager;
   private OnLobbyAddAI listener;
   private SocketIOClient socket;
   private PlayerClient client;

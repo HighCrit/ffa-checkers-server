@@ -22,7 +22,7 @@ import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLeave;
 import com.highcrit.ffacheckers.socket.lobby.objects.listeners.OnLobbyLoaded;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
 import com.highcrit.ffacheckers.socket.server.enums.SocketEvent;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnConnection;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnDisconnection;
@@ -33,7 +33,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SocketManager {
+public class SocketManager implements ISocketManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(SocketManager.class);
 
   @Getter(AccessLevel.PACKAGE)

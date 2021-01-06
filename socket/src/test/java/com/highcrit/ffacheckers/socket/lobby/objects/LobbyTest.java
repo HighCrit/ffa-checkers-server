@@ -3,7 +3,7 @@ package com.highcrit.ffacheckers.socket.lobby.objects;
 import static org.mockito.Mockito.mock;
 
 import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

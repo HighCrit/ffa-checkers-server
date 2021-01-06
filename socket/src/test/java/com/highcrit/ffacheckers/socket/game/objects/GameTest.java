@@ -7,21 +7,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import com.corundumstudio.socketio.SocketIOClient;
-import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 import com.highcrit.ffacheckers.domain.entities.Move;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
 import com.highcrit.ffacheckers.socket.game.objects.data.MoveResult;
 import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
+import com.highcrit.ffacheckers.socket.lobby.objects.ILobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
-import com.highcrit.ffacheckers.socket.server.objects.AIClient;
-import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.AIClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.AbstractClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,13 +30,12 @@ class GameTest {
           + "158,159:B36,37,45,46,54,55,63,64,72,73,81,82,90,91,99,100,108,109,117,118:G2,3,4,5,6,11,12,13,14,15,"
           + "20,21,22,23,24,29,30,31,32,33:R43,44,52,53,61,62,70,71,79,80,88,89,97,98,106,107,115,116,124,125";
 
-  private final LobbyManager lobbyManager = mock(LobbyManager.class);
-  private Lobby lobby;
+  private ILobby lobby;
   private Game game;
 
   @BeforeEach
   private void beforeEach() {
-    lobby = new Lobby(lobbyManager);
+    lobby = new Lobby(mock(LobbyManager.class));
     game = new Game(mock(Lobby.class));
   }
 

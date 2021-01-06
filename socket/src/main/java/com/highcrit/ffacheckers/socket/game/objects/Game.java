@@ -15,8 +15,9 @@ import com.highcrit.ffacheckers.socket.game.enums.GameState;
 import com.highcrit.ffacheckers.socket.game.instances.MoveCalculator;
 import com.highcrit.ffacheckers.socket.game.objects.data.MoveResult;
 import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
+import com.highcrit.ffacheckers.socket.lobby.objects.ILobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
-import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.AbstractClient;
 import com.highcrit.ffacheckers.socket.utils.WebManager;
 import lombok.Getter;
 
@@ -31,7 +32,7 @@ public class Game {
   @Getter
   private final EnumMap<PlayerColor, AbstractClient> players = new EnumMap<>(PlayerColor.class);
 
-  private final Lobby lobby;
+  private final ILobby lobby;
 
   // Save the move sets so we don't have to recalculate
   private List<Move> normalMoves = Collections.emptyList();

@@ -3,19 +3,17 @@ package com.highcrit.ffacheckers.socket.lobby.objects.listeners;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import java.util.UUID;
-
 import com.corundumstudio.socketio.SocketIOClient;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
-import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinAction;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class OnLobbyCreateTest {
-  private SocketManager socketManager;
+  private ISocketManager socketManager;
   private OnLobbyCreate listener;
   private SocketIOClient socket;
   private PlayerClient client;

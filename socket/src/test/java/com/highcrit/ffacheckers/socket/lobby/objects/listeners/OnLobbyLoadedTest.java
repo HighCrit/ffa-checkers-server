@@ -9,13 +9,14 @@ import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class OnLobbyLoadedTest {
-  private SocketManager socketManager;
+  private ISocketManager socketManager;
   private OnLobbyLoaded listener;
   private SocketIOClient socket;
   private PlayerClient client;

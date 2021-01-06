@@ -5,16 +5,16 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
-import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OnLobbyLoaded implements DataListener<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnLobbyLoaded.class);
-  private final SocketManager socketManager;
+  private final ISocketManager socketManager;
 
-  public OnLobbyLoaded(SocketManager socketManager) {
+  public OnLobbyLoaded(ISocketManager socketManager) {
     this.socketManager = socketManager;
   }
 

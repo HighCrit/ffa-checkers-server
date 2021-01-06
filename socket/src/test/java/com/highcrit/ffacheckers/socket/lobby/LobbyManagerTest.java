@@ -3,13 +3,14 @@ package com.highcrit.ffacheckers.socket.lobby;
 import static org.mockito.Mockito.mock;
 
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class LobbyManagerTest {
-  private final SocketManager socketManager = mock(SocketManager.class);
+  private final ISocketManager socketManager = mock(SocketManager.class);
   private LobbyManager lobbyManager;
 
   @BeforeEach

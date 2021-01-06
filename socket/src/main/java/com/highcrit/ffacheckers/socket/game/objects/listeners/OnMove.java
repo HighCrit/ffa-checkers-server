@@ -4,17 +4,17 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.highcrit.ffacheckers.domain.entities.Move;
-import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OnMove implements DataListener<Move> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnMove.class);
 
-  private final SocketManager socketManager;
+  private final ISocketManager socketManager;
 
-  public OnMove(SocketManager socketManager) {
+  public OnMove(ISocketManager socketManager) {
     this.socketManager = socketManager;
   }
 

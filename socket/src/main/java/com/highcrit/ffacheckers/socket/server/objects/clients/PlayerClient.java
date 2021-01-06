@@ -1,4 +1,4 @@
-package com.highcrit.ffacheckers.socket.server.objects;
+package com.highcrit.ffacheckers.socket.server.objects.clients;
 
 import java.util.UUID;
 

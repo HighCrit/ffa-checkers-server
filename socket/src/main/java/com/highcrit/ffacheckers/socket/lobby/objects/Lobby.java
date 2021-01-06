@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.communication.objects.Result;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
@@ -14,16 +13,16 @@ import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyPlayers;
-import com.highcrit.ffacheckers.socket.server.objects.AIClient;
-import com.highcrit.ffacheckers.socket.server.objects.AbstractClient;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.AIClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.AbstractClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Lobby {
+public class Lobby implements ILobby {
   private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
   private static final int LOBBY_MAX_IDLE_TIME = 120 * 60; // 2 hours
   private static final TaskScheduler scheduler = new TaskScheduler();

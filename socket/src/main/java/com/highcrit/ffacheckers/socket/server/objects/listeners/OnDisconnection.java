@@ -4,7 +4,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import com.highcrit.ffacheckers.socket.server.SocketManager;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

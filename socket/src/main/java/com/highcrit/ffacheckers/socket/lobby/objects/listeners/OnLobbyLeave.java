@@ -3,17 +3,17 @@ package com.highcrit.ffacheckers.socket.lobby.objects.listeners;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.highcrit.ffacheckers.socket.server.SocketManager;
-import com.highcrit.ffacheckers.socket.server.objects.PlayerClient;
+import com.highcrit.ffacheckers.socket.server.ISocketManager;
+import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OnLobbyLeave implements DataListener<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnLobbyLeave.class);
 
-  private final SocketManager socketManager;
+  private final ISocketManager socketManager;
 
-  public OnLobbyLeave(SocketManager socketManager) {
+  public OnLobbyLeave(ISocketManager socketManager) {
     this.socketManager = socketManager;
   }
 
