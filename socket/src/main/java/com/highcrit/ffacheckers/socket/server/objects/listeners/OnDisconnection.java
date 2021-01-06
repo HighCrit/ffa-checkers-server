@@ -12,11 +12,16 @@ import org.slf4j.LoggerFactory;
 public class OnDisconnection implements DisconnectListener {
   private static final Logger LOGGER = LoggerFactory.getLogger(OnDisconnection.class);
   private static final TaskScheduler scheduler = new TaskScheduler();
-  private static final int DISCONNECTION_TIMEOUT = 30; // 30 seconds
   private final SocketManager socketManager;
+  private final int disconnectionTimeout;
+
+  public OnDisconnection(SocketManager socketManager, int disconnectionTimeout) {
+    this.socketManager = socketManager;
+    this.disconnectionTimeout = disconnectionTimeout;
+  }
 
   public OnDisconnection(SocketManager socketManager) {
-    this.socketManager = socketManager;
+    this(socketManager, 30);
   }
 
   @Override
@@ -42,7 +47,7 @@ public class OnDisconnection implements DisconnectListener {
               socketManager.remove(info.getId());
             }
           },
-          DISCONNECTION_TIMEOUT);
+          disconnectionTimeout);
     } else {
       // If not in a game remove info from memory
       socketManager.remove(info.getId());

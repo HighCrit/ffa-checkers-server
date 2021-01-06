@@ -5,7 +5,6 @@ import lombok.Getter;
 
 public enum SocketEvent implements Event {
   /* Inbound */
-  RESET_UUID("reset-uuid"),
   UUID("uuid"),
 
   /* Outbound */

@@ -10,7 +10,9 @@ import static org.mockito.Mockito.verify;
 import java.util.UUID;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.highcrit.ffacheckers.domain.communication.objects.ActionFailed;
 import com.highcrit.ffacheckers.domain.entities.Move;
+import com.highcrit.ffacheckers.domain.entities.Piece;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.game.enums.GameEvent;
 import com.highcrit.ffacheckers.socket.game.objects.data.MoveResult;
@@ -77,15 +79,91 @@ class GameTest {
   }
 
   @Test
-  void removePlayer() {
-    AbstractClient yellow = new AIClient();
-    game.addPlayer(yellow);
-    game.removePlayer(yellow);
-    Assertions.assertEquals(0, game.getPlayers().size());
+  void onMoveInvalid() {
+    UUID id = UUID.randomUUID();
+    PlayerClient client = spy(new PlayerClient(id, mock(SocketIOClient.class)));
+    lobby.addPlayer(client);
+    lobby.onPlayerLoaded(client);
+
+    lobby.addPlayer(new AIClient());
+
+    lobby.getGame().start(DEFAULT_FEN);
+    lobby.getGame().onMove(client, new Move(1, 2, false));
+
+    verify(client).send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
   }
 
   @Test
-  void hasGameEnded() {}
+  void onMoveNotCurrentPlayer() {
+    lobby.addPlayer(mock(PlayerClient.class));
+
+    UUID id = UUID.randomUUID();
+    PlayerClient client = spy(new PlayerClient(id, mock(SocketIOClient.class)));
+    lobby.addPlayer(client);
+    lobby.onPlayerLoaded(client);
+
+    lobby.getGame().start(DEFAULT_FEN);
+    lobby.getGame().onMove(client, new Move());
+
+    verify(client).send(GameEvent.MOVE_RESULT, new ActionFailed("It's not your turn"));
+  }
+
+  @Test
+  void onMoveCapturingMove() {
+    UUID id = UUID.randomUUID();
+    PlayerClient client = spy(new PlayerClient(id, mock(SocketIOClient.class)));
+    lobby.addPlayer(client);
+    lobby.onPlayerLoaded(client);
+
+    lobby.addPlayer(new AIClient());
+    // Start with 2 players so we can control the board structure
+    lobby.getGame().start("Y155:B147");
+    Move firstMove = new Move(155, 138, false, new Piece(PlayerColor.BLUE, 147));
+    lobby.getGame().onMove(client, firstMove);
+
+    verify(client).send(GameEvent.MOVE_RESULT, new MoveResult(firstMove));
+  }
+
+  @Test
+  void onMoveCapturingMoveSequence() {
+    UUID id = UUID.randomUUID();
+    PlayerClient client = spy(new PlayerClient(id, mock(SocketIOClient.class)));
+    lobby.addPlayer(client);
+    lobby.onPlayerLoaded(client);
+
+    lobby.addPlayer(new AIClient());
+    // Start with 2 players so we can control the board structure
+    lobby.getGame().start("Y155:B147,130");
+    Move firstMove = new Move(155, 138, false, new Piece(PlayerColor.BLUE, 147));
+    Move secondMove = new Move(138, 121, false, new Piece(PlayerColor.BLUE, 130));
+    lobby.getGame().onMove(client, firstMove);
+
+    verify(client).send(GameEvent.MOVE_RESULT, new MoveResult(firstMove));
+  }
+
+  @Test
+  void onMoveCapturingMoveInvalid() {
+    UUID id = UUID.randomUUID();
+    PlayerClient client = spy(new PlayerClient(id, mock(SocketIOClient.class)));
+    lobby.addPlayer(client);
+    lobby.onPlayerLoaded(client);
+
+    lobby.addPlayer(new AIClient());
+    // Start with 2 players so we can control the board structure
+    lobby.getGame().start("Y155:B147");
+    Move firstMove = new Move(155, 146, false);
+    lobby.getGame().onMove(client, firstMove);
+
+    verify(client).send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
+  }
+
+  @Test
+  void removePlayer() {
+    AbstractClient client = new AIClient();
+    game.addPlayer(client);
+    game.removePlayer(client);
+    Assertions.assertEquals(0, game.getPlayers().size());
+  }
 
   @Test
   void onPlayerLoaded() {

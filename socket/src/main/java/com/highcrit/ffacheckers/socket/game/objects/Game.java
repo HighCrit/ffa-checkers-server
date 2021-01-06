@@ -157,6 +157,7 @@ public class Game {
       // If sequence is valid
       if (ms == null) {
         // No sequence was found
+        client.send(GameEvent.MOVE_RESULT, new ActionFailed("Invalid move"));
         lastMoveSequence.undoMove();
         return;
       }
@@ -209,7 +210,7 @@ public class Game {
       client.setGone(true);
       players.remove(info.getPlayerColor());
 
-      if (info.getPlayerColor() == currentPlayer) {
+      if (hasStarted && info.getPlayerColor() == currentPlayer) {
         startNextTurn();
       }
     }
