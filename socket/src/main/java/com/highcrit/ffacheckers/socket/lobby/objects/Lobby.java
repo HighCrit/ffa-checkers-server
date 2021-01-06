@@ -31,7 +31,7 @@ public class Lobby {
   @Getter(AccessLevel.PACKAGE)
   private final HashMap<UUID, AbstractClient> connectedClients = new HashMap<>();
 
-  @Getter private final LobbyManager lobbyManager;
+  private final LobbyManager lobbyManager;
   @Getter private final Game game = new Game(this);
   @Getter private final UUID code = UUID.randomUUID();
 
@@ -50,7 +50,9 @@ public class Lobby {
       LOGGER.error("Tried to handle player disconnect that wasn't in this lobby");
       return;
     }
-    send(LobbyEvent.PLAYER_DISCONNECT, info.getPlayerColor());
+    if (info.getPlayerColor() != null) {
+      send(LobbyEvent.PLAYER_DISCONNECT, info.getPlayerColor());
+    }
   }
 
   public void onPlayerReconnect(PlayerClient info) {
@@ -80,8 +82,11 @@ public class Lobby {
     } else {
       game.removePlayer(info);
       info.setHost(false);
-      sendPlayers();
     }
+  }
+
+  public void onGameEnd() {
+    lobbyManager.delete(code, "Game Ended");
   }
 
   public void delete() {

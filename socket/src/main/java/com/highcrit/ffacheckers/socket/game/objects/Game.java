@@ -223,7 +223,7 @@ public class Game {
       lobby.send(GameEvent.WON, playingPlayers.get(0).getPlayerColor());
       WebManager.saveReplay(
           new Replay(lobby.getCode(), board.getInitialFen(), board.getMoveHistory()));
-      lobby.getLobbyManager().delete(lobby.getCode(), "Game Ended");
+      lobby.onGameEnd();
     }
   }
 
