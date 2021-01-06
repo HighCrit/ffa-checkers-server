@@ -26,6 +26,8 @@ public class Replay {
   @Column(length = 650)
   private String initialFen;
 
-  @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+  @OneToMany(
+      cascade = {CascadeType.ALL},
+      orphanRemoval = true)
   private List<Move> moves;
 }

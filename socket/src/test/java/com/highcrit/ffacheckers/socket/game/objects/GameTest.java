@@ -70,7 +70,7 @@ class GameTest {
     lobby.addPlayer(new AIClient());
     // Start with 2 players so we can control the board structure
     lobby.getGame().start(DEFAULT_FEN);
-    Move firstMove = new Move(131, 121,false);
+    Move firstMove = new Move(131, 121, false);
     lobby.getGame().onMove(client, firstMove);
 
     verify(client).send(GameEvent.MOVE_RESULT, new MoveResult(firstMove));

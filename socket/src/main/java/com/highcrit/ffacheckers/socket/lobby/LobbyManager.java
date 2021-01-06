@@ -7,7 +7,6 @@ import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.Lobby;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyClosing;
 import com.highcrit.ffacheckers.socket.server.ISocketManager;
-import com.highcrit.ffacheckers.socket.server.SocketManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.slf4j.Logger;

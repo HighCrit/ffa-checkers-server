@@ -9,16 +9,21 @@ import com.highcrit.ffacheckers.socket.server.objects.clients.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 
 public interface ILobby {
-    Game getGame();
-    UUID getCode();
+  Game getGame();
 
-    void onPlayerLoaded(AbstractClient info);
-    void onPlayerDisconnect(AbstractClient info);
-    void onPlayerReconnect(PlayerClient info);
-    void onGameEnd();
+  UUID getCode();
 
-    Result addPlayer(AbstractClient client);
-    void removePlayer(PlayerClient info);
+  void onPlayerLoaded(AbstractClient info);
 
-    void send(Event event, Object data);
+  void onPlayerDisconnect(AbstractClient info);
+
+  void onPlayerReconnect(PlayerClient info);
+
+  void onGameEnd();
+
+  Result addPlayer(AbstractClient client);
+
+  void removePlayer(PlayerClient info);
+
+  void send(Event event, Object data);
 }
