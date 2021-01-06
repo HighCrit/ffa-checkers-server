@@ -62,10 +62,6 @@ public class Lobby {
   }
 
   public Result addPlayer(AbstractClient client) {
-    if (connectedClients.size() >= Game.MAX_PLAYERS) {
-      return new ActionFailed("Lobby is full");
-    }
-
     if (!connectedClients.containsKey(client.getId())) {
       connectedClients.put(client.getId(), client);
       game.addPlayer(client);
