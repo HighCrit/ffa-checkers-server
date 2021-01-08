@@ -6,11 +6,13 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.highcrit.ffacheckers.domain.communication.objects.Event;
 import com.highcrit.ffacheckers.domain.enums.PlayerColor;
 import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@EqualsAndHashCode
 public class PlayerClient extends AbstractClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(PlayerClient.class);
 
@@ -41,5 +43,11 @@ public class PlayerClient extends AbstractClient {
   @Override
   public boolean isBot() {
     return false;
+  }
+
+  @Override
+  public void reset() {
+    super.reset();
+    isHost = false;
   }
 }

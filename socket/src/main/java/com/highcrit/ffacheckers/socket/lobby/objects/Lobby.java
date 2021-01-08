@@ -80,7 +80,7 @@ public class Lobby implements ILobby {
       lobbyManager.delete(code, "No players left");
     } else {
       game.removePlayer(info);
-      info.setHost(false);
+      info.reset();
     }
   }
 
@@ -89,7 +89,7 @@ public class Lobby implements ILobby {
   }
 
   public void delete() {
-    connectedClients.values().forEach(s -> s.setLobby(null));
+    connectedClients.values().forEach(AbstractClient::reset);
   }
 
   public void send(Event event, Object data) {
