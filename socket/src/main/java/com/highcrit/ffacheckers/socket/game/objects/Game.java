@@ -75,7 +75,13 @@ public class Game {
       info.send(GameEvent.CURRENT_PLAYER, currentPlayer);
 
       if (currentPlayer == info.getPlayerColor()) {
-        info.send(GameEvent.MOVE_SET, capturingMoves.isEmpty() ? normalMoves : capturingMoves);
+        info.send(
+            GameEvent.MOVE_SET,
+            capturingMoves.isEmpty()
+                ? normalMoves
+                : capturingMoves.stream()
+                    .map(ms -> ms.getSequence().get(0))
+                    .collect(Collectors.toList()));
       }
     } else {
       if (players.values().stream().allMatch(AbstractClient::isLoaded)
