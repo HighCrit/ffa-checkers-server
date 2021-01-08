@@ -15,7 +15,6 @@ import com.highcrit.ffacheckers.socket.server.enums.ConnectionState;
 import com.highcrit.ffacheckers.socket.server.enums.SocketEvent;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import com.highcrit.ffacheckers.socket.server.objects.data.UID;
-import com.highcrit.ffacheckers.socket.server.objects.listeners.OnConnection;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnDisconnection;
 import com.highcrit.ffacheckers.socket.server.objects.listeners.OnUUID;
 import lombok.AccessLevel;
@@ -47,7 +46,6 @@ public class SocketManager implements ISocketManager {
   }
 
   private void registerEventListeners() {
-    server.addConnectListener(new OnConnection());
     server.addDisconnectListener(new OnDisconnection(this));
 
     addEventListener(SocketEvent.UUID, UID.class, new OnUUID(this));
