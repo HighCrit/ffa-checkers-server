@@ -39,7 +39,9 @@ class OnDisconnectionTest {
   void onDisconnectNotInLobby() {
     socketManager.registerClient(socket, null);
     listener.onDisconnect(socket);
-    await().atMost(500, TimeUnit.MILLISECONDS).until(() -> socketManager.getInfoByClient(socket) == null);
+    await()
+        .atMost(500, TimeUnit.MILLISECONDS)
+        .until(() -> socketManager.getInfoByClient(socket) == null);
   }
 
   @Test

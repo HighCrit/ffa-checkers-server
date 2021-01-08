@@ -66,10 +66,11 @@ public class Game {
               abstractPlayerClient.setLoaded(true);
               abstractPlayerClient.setGone(false);
             });
-    info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
+    if (info.getPlayerColor() != null) {
+      info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
+    }
     if (gameState == GameState.PLAYING) {
       info.send(GameEvent.STATE, gameState);
-      info.send(GameEvent.YOUR_COLOR, info.getPlayerColor());
       info.send(GameEvent.BOARD, board.toFen());
       info.send(GameEvent.CURRENT_PLAYER, currentPlayer);
 

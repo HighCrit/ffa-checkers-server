@@ -13,7 +13,6 @@ import com.highcrit.ffacheckers.socket.lobby.LobbyManager;
 import com.highcrit.ffacheckers.socket.lobby.enums.LobbyEvent;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyJoinResult;
 import com.highcrit.ffacheckers.socket.lobby.objects.data.LobbyPlayers;
-import com.highcrit.ffacheckers.socket.server.objects.clients.AIClient;
 import com.highcrit.ffacheckers.socket.server.objects.clients.AbstractClient;
 import com.highcrit.ffacheckers.socket.server.objects.clients.PlayerClient;
 import com.highcrit.ffacheckers.socket.utils.TaskScheduler;
@@ -76,7 +75,8 @@ public class Lobby implements ILobby {
 
   public void removePlayer(PlayerClient info) {
     connectedClients.remove(info.getId());
-    if (connectedClients.values().stream().allMatch(c -> c instanceof AIClient)) {
+    // Delete lobby if only bots and spectators are left
+    if (connectedClients.values().stream().allMatch(c -> c.isBot() || c.getPlayerColor() == null)) {
       lobbyManager.delete(code, "No players left");
     } else {
       game.removePlayer(info);

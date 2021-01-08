@@ -21,4 +21,6 @@ public abstract class AbstractClient {
   }
 
   public abstract void send(Event event, Object data);
+
+  public abstract boolean isBot();
 }

@@ -25,7 +25,10 @@ public class PlayerClient extends AbstractClient {
 
   @Override
   public void send(Event event, Object data) {
-    LOGGER.info(String.format("Sending event \"%s\" to socket id: %s", event.getEventName(), id));
+    LOGGER.info(
+        String.format(
+            "Sending event \"%s\" to socket id: %s data: %s",
+            event.getEventName(), id, data.toString()));
     socket.sendEvent(event.getEventName(), data);
   }
 
@@ -33,5 +36,10 @@ public class PlayerClient extends AbstractClient {
   public void setPlayerColor(PlayerColor playerColor) {
     super.setPlayerColor(playerColor);
     setName(playerColor.name());
+  }
+
+  @Override
+  public boolean isBot() {
+    return false;
   }
 }
