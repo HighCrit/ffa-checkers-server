@@ -30,6 +30,9 @@ public class LobbyManager {
     this.socketManager = socketManager;
   }
 
+  /**
+   * Registers listeners to the socket server for lobby related events
+   */
   public void initialize() {
     socketManager.addEventListener(
         LobbyEvent.CREATE_ACTION, null, new OnLobbyCreate(this, socketManager));
@@ -40,6 +43,10 @@ public class LobbyManager {
     socketManager.addEventListener(LobbyEvent.LOADED, null, new OnLobbyLoaded(socketManager));
   }
 
+  /**
+   * Creates a lobby and saves it
+   * @return lobby instance
+   */
   public Lobby create() {
     final Lobby lobby = new Lobby(this);
     this.lobbies.put(lobby.getCode(), lobby);
@@ -47,6 +54,11 @@ public class LobbyManager {
     return lobby;
   }
 
+  /**
+   * Removes a lobby for given id
+   * @param code lobby id
+   * @param reason reason for deleting
+   */
   public void delete(UUID code, String reason) {
     Lobby lobby = lobbies.get(code);
     if (lobby == null) {
@@ -59,10 +71,20 @@ public class LobbyManager {
     lobbies.remove(code);
   }
 
+  /**
+   * Returns whether a lobby exists for the given id
+   * @param code lobby id
+   * @return true if lobby exists
+   */
   public boolean has(UUID code) {
     return lobbies.containsKey(code);
   }
 
+  /**
+   * Returns a lobby for given id
+   * @param code lobby id
+   * @return lobby instance or null
+   */
   public Lobby get(UUID code) {
     return lobbies.get(code);
   }

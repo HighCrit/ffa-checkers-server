@@ -12,6 +12,11 @@ public enum Direction {
     this.indexOffset = indexOffset;
   }
 
+  /**
+   * Returns the index of the square after moving in this direction from given index
+   * @param index starting index
+   * @return index after move
+   */
   public int getIndexInDirectionFrom(int index) {
     if (index == -1) return -1;
     int rowOffset = (index / 9) % 2;

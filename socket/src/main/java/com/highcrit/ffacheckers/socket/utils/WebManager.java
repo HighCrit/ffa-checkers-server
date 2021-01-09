@@ -18,6 +18,10 @@ public class WebManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(WebManager.class);
   private static final String REPLAY_URL = "http://api:8080/api/replays/";
 
+    /**
+     * Saves the replay to the database using the api instance in the same docker group
+     * @param replay replay instance
+     */
   public void saveReplay(Replay replay) {
     try {
       ObjectMapper objectMapper = new ObjectMapper();
@@ -51,6 +55,10 @@ public class WebManager {
     }
   }
 
+    /**
+     * Removes the replay for given id
+     * @param id unique id
+     */
   public void deleteReplay(UUID id) {
     LOGGER.info(String.format("Deleting replays with id: %s", id));
     HttpClient client = HttpClient.newHttpClient();

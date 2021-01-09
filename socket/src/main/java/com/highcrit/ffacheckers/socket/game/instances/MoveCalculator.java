@@ -16,6 +16,9 @@ import com.highcrit.ffacheckers.socket.game.objects.moves.MoveSequence;
 import com.highcrit.ffacheckers.socket.utils.RankCalculator;
 
 public class MoveCalculator {
+  /**
+   * List of all directions a normal piece may move in
+   */
   private static final EnumMap<PlayerColor, List<Direction>> playerDirectionMap =
       new EnumMap<>(PlayerColor.class);
 
@@ -29,6 +32,12 @@ public class MoveCalculator {
     playerDirectionMap.put(PlayerColor.RED, Arrays.asList(Direction.UP_LEFT, Direction.DOWN_LEFT));
   }
 
+  /**
+   * Returns an array of the longest capturing sequences available for a given player on a board
+   * @param board board instance
+   * @param playerColor player
+   * @return array of longest capturing sequences
+   */
   public List<MoveSequence> getCapturingMoves(Board board, PlayerColor playerColor) {
     List<MoveSequence> moveSequences = new ArrayList<>();
     List<Piece> deSyncedPieces = new ArrayList<>();
@@ -52,6 +61,13 @@ public class MoveCalculator {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Creates a list of capturing sequences for a given piece on a board
+   * @param board board instance
+   * @param piece piece instance
+   * @param pastMoves moves made by previous iterations
+   * @param moveSequences list of capturing sequences
+   */
   private void getMoveSequenceOfPiece(
       Board board, Piece piece, LinkedList<Move> pastMoves, List<MoveSequence> moveSequences) {
     boolean jumpFound = false;
@@ -95,6 +111,12 @@ public class MoveCalculator {
     }
   }
 
+  /**
+   * Returns a list of all normal moves available to a player on a given board
+   * @param board board instance
+   * @param playerColor player color
+   * @return all normal moves for player
+   */
   public List<Move> getNormalMoves(Board board, PlayerColor playerColor) {
     List<Move> moves = new ArrayList<>();
     List<Piece> pieces = board.getPieces().get(playerColor);

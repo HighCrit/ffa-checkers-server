@@ -32,6 +32,12 @@ public class Board {
     this.initialFen = this.toFen();
   }
 
+  /**
+   * Constructs a board instance form a FEN string
+   * @see <a href="https://en.wikipedia.org/wiki/Portable_Draughts_Notation">Wikipedia PDN</a>
+   * @param fen fen string
+   * @return board instance
+   */
   public static Board fromFen(String fen) {
     List<Piece> pieces = new ArrayList<>();
 
@@ -50,6 +56,10 @@ public class Board {
     return new Board(pieces);
   }
 
+  /**
+   * Places pieces on the board and adds them to the players
+   * @param pieces list of pieces to add
+   */
   private void placePieces(List<Piece> pieces) {
     pieces.forEach(
         piece -> {
@@ -66,6 +76,10 @@ public class Board {
         });
   }
 
+  /**
+   * Executes move and saves it
+   * @param move move to execute
+   */
   public void applyMove(Move move) {
     Piece piece = grid[move.getStart()];
     piece.setPosition(move.getEnd());
@@ -80,6 +94,9 @@ public class Board {
     moveHistory.add(move);
   }
 
+  /**
+   * Undoes last move
+   */
   public void undoMove() {
     Move move = moveHistory.removeLast();
 
@@ -93,6 +110,11 @@ public class Board {
     }
   }
 
+  /**
+   * Constructs a FEN string from current board instance
+   * @see <a href="https://en.wikipedia.org/wiki/Portable_Draughts_Notation">Wikipedia PDN</a>
+   * @return FEN string
+   */
   public String toFen() {
     StringBuilder sb = new StringBuilder();
 

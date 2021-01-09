@@ -5,6 +5,12 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class RankCalculator {
+  /**
+   * Returns the rank a.k.a. row from the player's home base perspective using the index
+   * @param color color of player
+   * @param index position on the bord according to the FEN specifications
+   * @return rank of the index for the player color
+   */
   public int getRankFromIndexForColor(PlayerColor color, int index) {
     int row = index / 9;
     int col = (index % 9) * 2 + (row % 2);
