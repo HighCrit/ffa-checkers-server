@@ -23,14 +23,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.csrf()
         .disable()
         .authorizeRequests()
-        // All GET requests are okay
-        .antMatchers(HttpMethod.GET, replayAntPattern)
-        .permitAll()
         // For any non-get request to replay you'll need to have the ip resolved from 'socket'
         .antMatchers(HttpMethod.POST, replayAntPattern)
         .hasIpAddress(socketIp)
         .antMatchers(HttpMethod.DELETE, replayAntPattern)
         .hasIpAddress(socketIp)
+        // All GET requests are okay
+        .antMatchers(HttpMethod.GET)
+        .permitAll()
         // We'll permit routes on a route by route basis
         .anyRequest()
         .denyAll();
