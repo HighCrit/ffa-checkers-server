@@ -216,6 +216,7 @@ public class Game {
       AbstractClient client = oClient.get();
       client.setGone(true);
       players.remove(info.getPlayerColor());
+      hasGameEnded();
 
       if (hasStarted && info.getPlayerColor() == currentPlayer) {
         startNextTurn();
